@@ -1,12 +1,18 @@
 import Joi from "joi";
-import { ucFirst } from "./string.utils";
+import { capitalize } from "./string.utils";
 
 export function fieldValidator(name, field) {
-  let validator = Joi[field.type || 'string']();
+  let validator;
 
-  // Apply additional constraints
-  if (field.email) {
-    validator = validator.email({ tlds: { allow: false } });
+  switch (field.type) {
+    case 'number':
+      validator = Joi.number();
+      break;
+    case 'email':
+      validator = Joi.string().email({ tlds: { allow: false } });
+      break;
+    default:
+      validator = Joi.string();
   }
 
   if (field.pattern) {
@@ -25,7 +31,7 @@ export function fieldValidator(name, field) {
     validator = validator.max(field.max);
   }
 
-  validator = validator.label(field.label || ucFirst(name));
+  validator = validator.label(field.label || capitalize(name));
 
   if (field.messages) {
     validator = validator.messages(field.messages);

@@ -7,7 +7,7 @@ export function toFormData(values, prefix = '') {
     if (typeof value === 'object') {
       formData = {
         ...formData,
-        ...this.formData(value, `${prefix}${name}.`)
+        ...toFormData(value, `${prefix}${name}.`)
       };
     } else {
       formData[prefix + name] = value;
@@ -21,17 +21,17 @@ export function fromFormData(formData) {
   const values = {};
 
   for (const name in formData) {
-    const value = formData[name];
     const path = name.split('.');
+    let field = values;
 
-    while (path.length) {
+    while (path.length > 1) {
       const part = path.shift();
-
-      if (path.legth) {
-
-      } else {
-        
-      }
+      field[part] = field[part] || {};
+      field = field[part];
     }
+
+    field[path.shift()] = formData[name];
   }
+
+  return values;
 }
