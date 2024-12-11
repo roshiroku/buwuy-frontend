@@ -3,7 +3,9 @@ import * as authService from '../services/auth.service';
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const useAuth = () => useContext(AuthContext);
+
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stores user data
   const [loading, setLoading] = useState(true); // Loading state
 
@@ -51,4 +53,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export default AuthProvider;
