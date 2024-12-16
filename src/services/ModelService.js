@@ -5,8 +5,8 @@ export default class Service {
     this.baseUrl = baseUrl;
   }
 
-  async all() {
-    const { data } = await axios.get(this.baseUrl);
+  async find(params) {
+    const { data } = await axios.get(this.baseUrl, { params });
     return data;
   }
 

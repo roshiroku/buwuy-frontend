@@ -1,14 +1,12 @@
 import { createContext, useContext } from 'react';
-import tagService from '../services/tag.service';
-import { useModelContext } from '../hooks/useModelContext';
+import { useTags as useModels } from '../services/tag.service';
 
 export const TagContext = createContext();
 
 export const useTags = () => useContext(TagContext);
 
 const TagProvider = ({ children }) => {
-  const ctx = useModelContext(tagService, 'tag');
-
+  const ctx = useModels();
   return (
     <TagContext.Provider value={ctx}>
       {children}

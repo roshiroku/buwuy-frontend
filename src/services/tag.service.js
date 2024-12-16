@@ -1,9 +1,14 @@
-import Service from './Service';
+import ModelService from './ModelService';
+import useModelService from '../hooks/useModelService';
 
-class TagService extends Service {
+class TagService extends ModelService {
   constructor() {
     super('/tags');
   }
 }
 
-export default new TagService();
+const tagService = new TagService();
+
+export const { useTag, useTags } = useModelService(tagService, { name: 'tag' });
+
+export default tagService;

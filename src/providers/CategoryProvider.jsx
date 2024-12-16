@@ -1,17 +1,12 @@
 import { createContext, useContext } from 'react';
-import categoryService from '../services/category.service';
-import { useModelContext } from '../hooks/useModelContext';
+import { useCategories as useModels } from '../services/category.service';
 
 export const CategoryContext = createContext();
 
 export const useCategories = () => useContext(CategoryContext);
 
 const CategoryProvider = ({ children }) => {
-  const ctx = useModelContext(categoryService, {
-    single: 'category',
-    plural: 'categories',
-  }, true);
-
+  const ctx = useModels();
   return (
     <CategoryContext.Provider value={ctx}>
       {children}
