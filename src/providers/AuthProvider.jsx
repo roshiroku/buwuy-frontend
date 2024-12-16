@@ -7,7 +7,7 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stores user data
-  const [loading, setLoading] = useState(true); // Loading state
+  const [isLoading, setIsLoading] = useState(true); // Loading state
 
   const login = async (email, password) => {
     const user = await authService.login(email, password);
@@ -26,7 +26,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const ctx = { user, loading, login, register, logout };
+  const ctx = { user, isLoading, login, register, logout };
 
   useEffect(() => {
     // Check for token in localStorage
@@ -40,9 +40,9 @@ const AuthProvider = ({ children }) => {
           console.error('Invalid token', error);
           logout();
         })
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     } else {
-      setLoading(false);
+      setIsLoading(false);
     }
   }, []);
 

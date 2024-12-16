@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Input = ({ value, onChange }) => {
+const Input = ({ value, type, onChange }) => {
   return (
     <input value={value} onInput={(e) => onChange(e, e.target.value)} />
   );
