@@ -1,44 +1,44 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { useProduct, useProducts } from '../../services/product.service';
 import Markdown from 'react-markdown';
-import { resolveUrl } from '../../utils/url.utils';
+import { useProduct, useProducts } from '../../services/product.service';
+import ProductImages from '../../components/shop/ProductImages';
 
 const ProductPage = () => {
   const { productSlug: slug } = useParams();
-  const { products, isLoadingProducts } = useProducts({ slug, limit: 1 });
+  const { products } = useProducts({ slug, limit: 1 });
   const { product } = useProduct(products[0]);
-  const primaryImage = useMemo(() => product?.images[0], [product]);
+  const isLoading = useMemo(() => !product, [product]);
 
   return (
     <div>
       <div>
-        {isLoadingProducts ? 'loading...' : primaryImage && (
-          <img src={resolveUrl(primaryImage.src)} alt={primaryImage.alt || product.name} style={{ display: 'block', maxWidth: '100%' }} />
+        {isLoading ? 'loading...' : (
+          <ProductImages images={product.images || []} />
         )}
       </div>
       <div>
-        <h1>{isLoadingProducts ? 'loading...' : product?.name}</h1>
+        <h1>{isLoading ? 'loading...' : product.name}</h1>
         <div>
-          {isLoadingProducts ? (
+          {isLoading ? (
             'loading...'
           ) : (
             <Markdown>
-              {product?.description}
+              {product.description}
             </Markdown>
           )}
         </div>
         <div>
-          {isLoadingProducts ? (
+          {isLoading ? (
             'loading...'
           ) : (
             <>
               <div>
                 <b>Price:</b>
-                {product?.price}
+                {product.price}
               </div>
-              <button disabled={!product?.stock}>
-                {product?.stock ? 'Add To Cart' : 'Out Of Stock'}
+              <button disabled={!product.stock}>
+                {product.stock ? 'Add To Cart' : 'Out Of Stock'}
               </button>
             </>
           )}
