@@ -1,4 +1,4 @@
-import axios from '../api/axiosConfig';
+import axios from '../api/axios.js';
 
 export default class Service {
   constructor(baseUrl) {

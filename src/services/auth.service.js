@@ -1,4 +1,4 @@
-import axios from '../api/axiosConfig';
+import axios from '../api/axios.js';
 
 const TOKEN_KEY = 'token';
 

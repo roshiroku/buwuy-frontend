@@ -19,7 +19,7 @@ export default function useModels(service, config = {}, setConfig = undefined) {
 
   useEffect(() => {
     setParams(config);
-  }, [config]);
+  }, Object.values(config));
 
   useEffect(() => {
     getModels();

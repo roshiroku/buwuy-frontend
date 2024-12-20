@@ -13,7 +13,7 @@ export default function useModelService(service, { name = 'model' }) {
       return useMemo(() => {
         const ctx = {};
         for (const k in model) {
-          if (k.includes(/model/i)) {
+          if (k.match(/model/i)) {
             ctx[k.replace('model', single).replace('Model', Single)] = model[k];
           } else {
             ctx[k + Single] = model[k];
@@ -27,7 +27,7 @@ export default function useModelService(service, { name = 'model' }) {
       return useMemo(() => {
         const ctx = {};
         for (const k in models) {
-          if (k.includes(/models/i)) {
+          if (k.match(/model/i)) {
             ctx[k.replace('models', plural).replace('Models', Plural)] = models[k];
           } else {
             ctx[k + Plural] = models[k];

@@ -3,7 +3,7 @@ import useModelService from '../hooks/useModelService';
 
 class CategoryService extends ModelService {
   constructor() {
-    super('/categories');
+    super('/api/categories');
   }
 }
 
