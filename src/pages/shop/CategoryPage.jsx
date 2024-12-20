@@ -31,7 +31,7 @@ const CategoryPage = () => {
         ) : (
           products.map((product) => (
             <li key={product._id}>
-              <ProductCard {...product} />
+              <ProductCard href={`/shop/${category.slug}/${product.slug}`} product={product} />
             </li>
           ))
         )}

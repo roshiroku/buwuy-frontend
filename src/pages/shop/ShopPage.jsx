@@ -13,7 +13,7 @@ const ShopPage = () => {
         ) : (
           categories.map((category) => (
             <li key={category._id}>
-              <CategoryCard {...category} />
+              <CategoryCard href={`/shop/${category.slug}`} category={category} />
             </li>
           ))
         )}

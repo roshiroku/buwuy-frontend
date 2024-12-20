@@ -5,7 +5,7 @@ export default function useModel(service, input) {
   const [isLoading, setIsLoading] = useState(!(model || !input));
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-
+  
   const loadModel = async (modelId) => {
     try {
       setIsLoading(true);

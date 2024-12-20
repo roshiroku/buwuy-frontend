@@ -3,7 +3,7 @@ import useModelService from '../hooks/useModelService';
 
 class ProductService extends ModelService {
   constructor() {
-    super('/products');
+    super('/api/products');
   }
 }
 
