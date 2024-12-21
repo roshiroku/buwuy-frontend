@@ -27,7 +27,7 @@ export function fieldValidator(name, field) {
     validator = validator.min(field.min);
   }
 
-  if (field.max) {
+  if ('max' in field) {
     validator = validator.max(field.max);
   }
 

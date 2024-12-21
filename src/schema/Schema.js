@@ -16,11 +16,24 @@ export default class Schema {
     }
 
     this.validator = schemaValidator(this.fields);
-    this.validate = this.validator.validate;
+  }
+
+  validate(values) {
+    const errors = {};
+    let hasErrors = false;
+    for (const name in values) {
+      const error = this.validateField(name, values[name]);
+      if (error) {
+        errors[name] = error;
+        hasErrors = true;
+      }
+    }
+    return hasErrors && errors;
   }
 
   validateField(name, value) {
-    return this.fields[name].validate(value);
+    const { error } = this.fields[name].validate(value);
+    return error?.details[0].message;
   }
 
   empty() {

@@ -1,6 +1,6 @@
 import { useAuth } from '../../providers/AuthProvider';
 import loginSchema from '../../schema/login.schema';
-import Form from '../forms/Form';
+import Form, { SubmitButton } from '../forms/Form';
 
 const LoginForm = ({ onSuccess }) => {
   const { login } = useAuth();
@@ -11,7 +11,9 @@ const LoginForm = ({ onSuccess }) => {
   };
 
   return (
-    <Form schema={loginSchema} onSubmit={handleSubmit} />
+    <Form schema={loginSchema} onSubmit={handleSubmit}>
+      <SubmitButton>Login</SubmitButton>
+    </Form>
   );
 };
 

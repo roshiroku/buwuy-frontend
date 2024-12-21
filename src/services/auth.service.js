@@ -9,7 +9,7 @@ export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token);
 export const removeToken = () => localStorage.removeItem(TOKEN_KEY);
 
 export const auth = async () => {
-  const { data } = await axios.get('/api/auth/me');
+  const { data } = await axios.get('/api/auth');
   return data;
 };
 
