@@ -19,7 +19,10 @@ const Header = () => {
         user ? (
           <button onClick={handleLogout}>Logout</button>
         ) : (
-          <a href="/login">Login</a>
+          <>
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+          </>
         )
       )}
     </header>

@@ -1,3 +1,4 @@
+import { toFormData } from 'axios';
 import axios from '../api/axios.js';
 
 const TOKEN_KEY = 'token';
@@ -19,10 +20,11 @@ export const login = async (email, password) => {
   return data;
 };
 
-export const register = async (name, email, password) => {
-  const { data } = await axios.post('/api/auth/register', { name, email, password });
-  setToken(data.token);
-  return data;
+export const register = async (data) => {
+  data = data instanceof FormData ? data : toFormData(data);
+  const { data: user } = await axios.post('/api/auth/register', data);
+  setToken(user.token);
+  return user;
 };
 
 export const logout = removeToken;

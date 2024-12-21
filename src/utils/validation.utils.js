@@ -11,6 +11,9 @@ export function fieldValidator(name, field) {
     case 'email':
       validator = Joi.string().email({ tlds: { allow: false } });
       break;
+    case 'file':
+      validator = Joi.object();
+      break;
     default:
       validator = Joi.string();
   }

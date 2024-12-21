@@ -1,11 +1,12 @@
 import Schema from './Schema';
 import { loginFields } from './login.schema';
 
-const nameField = { min: 2, max: 32, required: true };
+const nameField = { min: 2, max: 24 };
 
 export const registerFields = {
   'name.first': { ...nameField, label: 'First Name' },
   'name.last': { ...nameField, label: 'Last Name' },
+  'avatar': { type: 'file' },
   ...loginFields,
 };
 

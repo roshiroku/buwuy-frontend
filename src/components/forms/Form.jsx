@@ -1,9 +1,16 @@
 import React, { useMemo, useState } from 'react';
 
-export const Input = ({ value, placeholder, type, onChange, error }) => {
+export const Input = ({ value: _value, placeholder, type, onChange, error }) => {
+  const [value, setValue] = useState(_value);
+
+  const handleInput = (e) => {
+    setValue(e.target.value);
+    onChange(e, type === 'file' ? e.target.files[0] : e.target.value);
+  };
+
   return (
     <>
-      <input value={value} placeholder={placeholder} onInput={(e) => onChange(e, e.target.value)} />
+      <input type={type || 'text'} value={value} placeholder={placeholder} onInput={handleInput} />
       {error && <span>{error}</span>}
     </>
   );
@@ -14,7 +21,7 @@ export const SubmitButton = ({ children = 'Submit' }) => {
 };
 
 const Form = ({ default: _default, schema, onChange, onSubmit, children: _children }) => {
-  const [formData, setFormData] = useState(_default ?? schema.empty());
+  const [data, setData] = useState(_default ?? schema.empty());
   const [errors, setErrors] = useState({});
 
   const [submitButton, ...children] = useMemo(() => React.Children.toArray(_children)
@@ -24,7 +31,7 @@ const Form = ({ default: _default, schema, onChange, onSubmit, children: _childr
     }, [<SubmitButton />]), [_children]);
 
   const handleReset = () => {
-    setFormData(_default ?? schema.empty());
+    setData(_default ?? schema.empty());
   };
 
   const handleChange = (name) => (e, value) => {
@@ -32,13 +39,13 @@ const Form = ({ default: _default, schema, onChange, onSubmit, children: _childr
     if (name in errors) {
       setErrors({ ...errors, [name]: error });
     }
-    setFormData({ ...formData, [name]: value });
+    setData({ ...data, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const errors = schema.validate(formData);
-    !errors && onSubmit && onSubmit(formData);
+    const errors = schema.validate(data);
+    !errors && onSubmit && onSubmit(data);
     setErrors(errors || {});
   };
 
@@ -49,7 +56,7 @@ const Form = ({ default: _default, schema, onChange, onSubmit, children: _childr
         return (
           <Input
             key={name}
-            value={formData[name]}
+            value={data[name]}
             placeholder={field.label}
             onChange={handleChange(name)}
             error={errors[name]}

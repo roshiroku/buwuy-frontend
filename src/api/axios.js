@@ -2,10 +2,10 @@ import axios from 'axios';
 import { getToken } from '../services/auth.service';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000', // Replace with your backend URL
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: import.meta.env.VITE_ROOT_URI,
+  // headers: {
+  //   'Content-Type': 'application/json',
+  // }
 });
 
 // Request interceptor to add token to headers

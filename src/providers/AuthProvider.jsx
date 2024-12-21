@@ -3,7 +3,7 @@ import * as authService from '../services/auth.service';
 
 export const AuthContext = createContext();
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext) || {};
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stores user data
@@ -15,8 +15,8 @@ const AuthProvider = ({ children }) => {
     return user;
   };
 
-  const register = async (name, email, password) => {
-    const user = await authService.register(name, email, password);
+  const register = async (data) => {
+    const user = await authService.register(data);
     setUser(user);
     return user;
   };
