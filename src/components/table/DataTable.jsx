@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 const DataTable = ({
   columns,
@@ -10,8 +10,10 @@ const DataTable = ({
   limit: _limit = 5,
   sortParam = 'sort',
   pageParam = 'page',
-  limitParam = 'limit'
+  limitParam = 'limit',
+  limitOptions = [5, 10, 20]
 }) => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const sort = searchParams.get(sortParam) || _sort;
   const page = searchParams.get(pageParam) || _page;
@@ -26,7 +28,7 @@ const DataTable = ({
     'sort' in params && sortParam && url.searchParams.set(sortParam, params.sort);
     'page' in params && pageParam && url.searchParams.set(pageParam, params.page);
     'limit' in params && limitParam && url.searchParams.set(limitParam, params.limit);
-    return url.href;
+    return url.pathname + url.search;
   };
 
   const rows = useMemo(() => {
@@ -67,6 +69,13 @@ const DataTable = ({
         </tbody>
       </table>
       <div>
+        {limitOptions.length > 1 && (
+          <select value={limit} onChange={(e) => navigate(getUrl({ limit: e.target.value }))}>
+            {limitOptions.map((option) => (
+              <option key={option}>{option}</option>
+            ))}
+          </select>
+        )}
         {pageCount > 1 && (
           <div>
             {new Array(pageCount).map((_, i) => (
