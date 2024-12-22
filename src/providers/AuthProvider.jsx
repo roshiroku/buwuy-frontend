@@ -1,9 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as authService from '../services/auth.service';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({});
 
-export const useAuth = () => useContext(AuthContext) || {};
+export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stores user data

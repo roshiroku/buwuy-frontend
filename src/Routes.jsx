@@ -17,36 +17,28 @@ import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 export default () => {
   return (
     <Routes>
-      <Route element={(
-        <CategoryProvider>
-          <Layout>
-            <Outlet />
-          </Layout>
-        </CategoryProvider>
-      )}>
-        <Route index element={<HomePage />} />
-        <Route element={<GuestOnly><Outlet /></GuestOnly>}>
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+      <Route element={<CategoryProvider><Outlet /></CategoryProvider>}>
+        <Route element={<Layout><Outlet /></Layout>}>
+          <Route index element={<HomePage />} />
+          <Route element={<GuestOnly><Outlet /></GuestOnly>}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+          </Route>
+          <Route path="shop" element={<ShopPage />} />
+          <Route path="shop/:categorySlug" element={<CategoryPage />} />
+          <Route path="shop/:categorySlug/:productSlug" element={<ProductPage />} />
         </Route>
-        <Route path="shop" element={<ShopPage />} />
-        <Route path="shop/:categorySlug" element={<CategoryPage />} />
-        <Route path="shop/:categorySlug/:productSlug" element={<ProductPage />} />
-      </Route>
-      <Route path="admin" element={(
-        <AdminLayout>
-          <Outlet />
-        </AdminLayout>
-      )}>
-        <Route element={<Authorize redirect="/admin/login"><Outlet /></Authorize>}>
-          <Route index element={<AdminPage />} />
-          <Route path="categories" element={<AdminCategoriesPage />} />
+        <Route path="admin" element={<AdminLayout><Outlet /></AdminLayout>}>
+          <Route element={<Authorize redirect="/admin/login"><Outlet /></Authorize>}>
+            <Route index element={<AdminPage />} />
+            <Route path="categories" element={<AdminCategoriesPage />} />
+          </Route>
+          <Route path="login" element={(
+            <GuestOnly redirect={({ role }) => role === 'admin' ? '/admin' : '/'}>
+              <AdminLoginPage />
+            </GuestOnly>
+          )} />
         </Route>
-        <Route path="login" element={(
-          <GuestOnly redirect={({ role }) => role === 'admin' ? '/admin' : '/'}>
-            <AdminLoginPage />
-          </GuestOnly>
-        )} />
       </Route>
     </Routes >
   );
