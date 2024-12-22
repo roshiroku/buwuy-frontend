@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { resolveUrl } from "../../utils/url.utils";
+import { remoteAsset } from "../../utils/url.utils";
 
 const ProductImages = ({ images }) => {
   const [selectedImage, setSelectedImage] = useState(images[0]);
@@ -10,12 +10,12 @@ const ProductImages = ({ images }) => {
 
   return (
     <div>
-      <img src={resolveUrl(selectedImage.src)} alt={selectedImage.alt} style={{ display: 'block', maxWidth: '100%' }} />
+      <img src={remoteAsset(selectedImage.src)} alt={selectedImage.alt} style={{ display: 'block', maxWidth: '100%' }} />
       <ul>
         {images.map((image, i) => (
           <li key={i}>
             <button onClick={() => setSelectedImage(image)}>
-              <img src={resolveUrl(image.src)} alt={image.alt} style={{ display: 'block', maxWidth: '100%' }} />
+              <img src={remoteAsset(image.src)} alt={image.alt} style={{ display: 'block', maxWidth: '100%' }} />
             </button>
           </li>
         ))}

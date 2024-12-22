@@ -1,8 +1,6 @@
-import { useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useCategories } from "../../providers/CategoryProvider";
 import DataTable from "../../components/table/DataTable";
-import { resolveUrl } from "../../utils/url.utils";
+import { remoteAsset } from "../../utils/url.utils";
 
 const AdminCategoriesPage = () => {
   const { categories, isLoadingCategories } = useCategories();
@@ -14,7 +12,7 @@ const AdminCategoriesPage = () => {
       sortable: true,
       parse: ({ name, image }) => (
         <div>
-          <img src={resolveUrl(image)} alt={name} style={{ display: 'block', width: '150px', aspectRatio: 1, objectFit: 'cover' }} />
+          <img src={remoteAsset(image)} alt={name} style={{ display: 'block', width: '150px', aspectRatio: 1, objectFit: 'cover' }} />
           <span>{name}</span>
         </div>
       )
