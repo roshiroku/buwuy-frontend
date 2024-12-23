@@ -13,6 +13,7 @@ import AdminLayout from './components/admin/layout/AdminLayout';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminPage from './pages/admin/AdminPage';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
+import AdminCategoryPage from './pages/admin/AdminCategoryPage';
 
 export default () => {
   return (
@@ -31,7 +32,9 @@ export default () => {
         <Route path="admin" element={<AdminLayout><Outlet /></AdminLayout>}>
           <Route element={<Authorize redirect="/admin/login"><Outlet /></Authorize>}>
             <Route index element={<AdminPage />} />
+            <Route path="category" element={<AdminCategoryPage />} />
             <Route path="categories" element={<AdminCategoriesPage />} />
+            <Route path="categories/:id" element={<AdminCategoryPage />} />
           </Route>
           <Route path="login" element={(
             <GuestOnly redirect={({ role }) => role === 'admin' ? '/admin' : '/'}>

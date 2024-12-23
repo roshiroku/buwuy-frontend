@@ -1,5 +1,22 @@
-import { useMemo } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useMemo } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { isDate } from '../../utils/string.utils';
+
+function parse(row, col) {
+  if (col.parse) return col.parse(row);
+
+  const value = row[col.name];
+
+  if (isDate(value)) {
+    return new Date(value).toLocaleDateString();
+  }
+
+  if (typeof value === 'number') {
+    return value.toLocaleString();
+  }
+
+  return value;
+}
 
 const DataTable = ({
   columns,
@@ -61,7 +78,7 @@ const DataTable = ({
             <tr key={row._id ?? i}>
               {columns.map((col, j) => (
                 <td key={col.name ?? j}>
-                  {col.parse ? col.parse(row) : row[col.name]}
+                  {parse(row, col)}
                 </td>
               ))}
             </tr>

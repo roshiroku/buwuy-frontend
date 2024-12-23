@@ -1,20 +1,5 @@
 import React, { useMemo, useState } from 'react';
-
-export const Input = ({ value: _value, placeholder, type, onChange, error }) => {
-  const [value, setValue] = useState(_value);
-
-  const handleInput = (e) => {
-    setValue(e.target.value);
-    onChange(e, type === 'file' ? e.target.files[0] : e.target.value);
-  };
-
-  return (
-    <>
-      <input type={type || 'text'} value={value} placeholder={placeholder} onInput={handleInput} />
-      {error && <span>{error}</span>}
-    </>
-  );
-};
+import Input from './Input';
 
 export const SubmitButton = ({ children = 'Submit' }) => {
   return <button type="submit">{children}</button>;

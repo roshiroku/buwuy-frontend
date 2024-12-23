@@ -1,3 +1,4 @@
+import { toFormData } from 'axios';
 import axios from '../api/axios.js';
 
 export default class Service {
@@ -19,9 +20,9 @@ export default class Service {
     let res;
 
     if (model._id) {
-      res = await axios.put(this.baseUrl + `/${model._id}`, model);
+      res = await axios.put(this.baseUrl + `/${model._id}`, toFormData(model));
     } else {
-      res = await axios.post(this.baseUrl, model);
+      res = await axios.post(this.baseUrl, toFormData(model));
     }
 
     return res.data;

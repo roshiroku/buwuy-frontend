@@ -5,3 +5,7 @@ export function ucFirst(str) {
 export function capitalize(str) {
   return str ? str.split(' ').map(ucFirst).join(' ') : '';
 }
+
+export function isDate(str) {
+  return new Date(str).toString() !== 'Invalid Date';
+}

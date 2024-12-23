@@ -1,5 +1,5 @@
-import Joi from "joi";
-import { capitalize } from "./string.utils";
+import Joi from 'joi';
+import { capitalize } from './string.utils';
 
 export function fieldValidator(name, field) {
   let validator;
@@ -12,7 +12,7 @@ export function fieldValidator(name, field) {
       validator = Joi.string().email({ tlds: { allow: false } });
       break;
     case 'file':
-      validator = Joi.object();
+      validator = Joi.alternatives().try(Joi.object(), Joi.string());
       break;
     default:
       validator = Joi.string();
@@ -24,6 +24,8 @@ export function fieldValidator(name, field) {
 
   if (field.required) {
     validator = validator.required();
+  } else {
+    validator = validator.allow('');
   }
 
   if ('min' in field) {

@@ -21,7 +21,7 @@ export default class Schema {
   validate(values) {
     const errors = {};
     let hasErrors = false;
-    for (const name in values) {
+    for (const name in this.fields) {
       const error = this.validateField(name, values[name]);
       if (error) {
         errors[name] = error;
