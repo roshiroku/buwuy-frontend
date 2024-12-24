@@ -33,8 +33,8 @@ const DataTable = ({
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const sort = searchParams.get(sortParam) || _sort;
-  const page = searchParams.get(pageParam) || _page;
-  const limit = searchParams.get(limitParam) || _limit;
+  const page = Number(searchParams.get(pageParam)) || _page;
+  const limit = Number(searchParams.get(limitParam)) || _limit;
   const pageCount = Math.ceil(count / limit);
   const sortDesc = sort.startsWith('-');
   const sortBy = sortDesc ? sort.substring(1) : sort;
@@ -95,8 +95,12 @@ const DataTable = ({
         )}
         {pageCount > 1 && (
           <div>
-            {new Array(pageCount).map((_, i) => (
-              <Link to={getUrl({ page: i + 1 })}>{i + 1}</Link>
+            {[...Array(pageCount)].map((_, i) => (
+              i + 1 === page ? i + 1 : (
+                <Link to={getUrl({ page: i + 1 })} key={i}>
+                  {i + 1}
+                </Link>
+              )
             ))}
           </div>
         )}

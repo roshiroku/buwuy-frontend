@@ -3,7 +3,7 @@ import useModelService from '../hooks/useModelService';
 
 class TagService extends ModelService {
   constructor() {
-    super('/tags');
+    super('/api/tags');
   }
 }
 
