@@ -1,4 +1,5 @@
 import { Outlet, Route, Routes } from 'react-router-dom';
+import TagProvider from './providers/TagProvider';
 import CategoryProvider from './providers/CategoryProvider';
 import Authorize from './components/auth/Authorize';
 import GuestOnly from './components/auth/GuestOnly';
@@ -14,11 +15,20 @@ import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminPage from './pages/admin/AdminPage';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminCategoryPage from './pages/admin/AdminCategoryPage';
+import AdminProductsPage from './pages/admin/AdminProductsPage';
+import AdminProductPage from './pages/admin/AdminProductPage';
+import AdminTagsPage from './pages/admin/AdminTagsPage';
 
 export default () => {
   return (
     <Routes>
-      <Route element={<CategoryProvider><Outlet /></CategoryProvider>}>
+      <Route element={(
+        <CategoryProvider>
+          <TagProvider>
+            <Outlet />
+          </TagProvider>
+        </CategoryProvider>
+      )}>
         <Route element={<Layout><Outlet /></Layout>}>
           <Route index element={<HomePage />} />
           <Route element={<GuestOnly><Outlet /></GuestOnly>}>
@@ -35,6 +45,9 @@ export default () => {
             <Route path="category" element={<AdminCategoryPage />} />
             <Route path="categories" element={<AdminCategoriesPage />} />
             <Route path="categories/:id" element={<AdminCategoryPage />} />
+            <Route path="products" element={<AdminProductsPage />} />
+            <Route path="products/:id" element={<AdminProductPage />} />
+            <Route path="tags" element={<AdminTagsPage />} />
           </Route>
           <Route path="login" element={(
             <GuestOnly redirect={({ role }) => role === 'admin' ? '/admin' : '/'}>

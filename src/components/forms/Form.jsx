@@ -9,11 +9,7 @@ const Form = ({ default: _default, schema, onChange, onSubmit, children: _childr
   const [data, setData] = useState(_default ?? schema.empty());
   const [errors, setErrors] = useState({});
 
-  const [submitButton, ...children] = useMemo(() => React.Children.toArray(_children)
-    .reduce((children, child) => {
-      const isSubmitButton = child.type.toString() === SubmitButton.toString();
-      return isSubmitButton ? [child, ...children.slice(1)] : [...children, child];
-    }, [<SubmitButton />]), [_children]);
+  const { children, submitButton, customInputs } = useFormChildren(_children);
 
   const handleReset = () => {
     setData(_default ?? schema.empty());
@@ -38,21 +34,41 @@ const Form = ({ default: _default, schema, onChange, onSubmit, children: _childr
     <form onSubmit={handleSubmit}>
       {schema.items.map((field) => {
         const name = field.name;
+        const customInput = customInputs[name];
         return (
-          <Input
-            key={name}
-            value={data[name]}
-            placeholder={field.label}
-            onChange={handleChange(name)}
-            error={errors[name]}
-            {...field}
-          />
-        );
+          customInput ? customInput(data[name], handleChange(name)) : (
+            <Input
+              key={name}
+              value={data[name]}
+              placeholder={field.label}
+              onChange={handleChange(name)}
+              error={errors[name]}
+              {...field}
+            />
+          ));
       })}
       {children}
       {submitButton}
     </form>
   );
 };
+
+function useFormChildren(input) {
+  return useMemo(() => {
+    input = Array.isArray(input) ? input : [input];
+    const { children, submitButton, customInputs = {} } =
+      input.reduce((res, child) => {
+        if (typeof child === 'function') {
+          res.customInputs[child().key] = child;
+        } if (child?.type === SubmitButton) {
+          res.submitButton = child;
+        } else if (child) {
+          res.children.push(React.Children.toArray(child));
+        }
+        return res;
+      }, { children: [], submitButton: <SubmitButton />, customInputs: {} });
+    return { children, submitButton, customInputs };
+  }, [input]);
+}
 
 export default Form;

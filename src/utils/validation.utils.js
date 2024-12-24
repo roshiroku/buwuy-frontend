@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { capitalize } from './string.utils';
 
-export function fieldValidator(name, field) {
+export function fieldValidator(name, field = {}) {
   let validator;
 
   switch (field.type) {
@@ -13,6 +13,9 @@ export function fieldValidator(name, field) {
       break;
     case 'file':
       validator = Joi.alternatives().try(Joi.object(), Joi.string());
+      break;
+    case 'array':
+      validator = Joi.array().items(fieldValidator(null, field.subtype));
       break;
     default:
       validator = Joi.string();
@@ -36,7 +39,9 @@ export function fieldValidator(name, field) {
     validator = validator.max(field.max);
   }
 
-  validator = validator.label(field.label || capitalize(name));
+  if (field.label || name) {
+    validator = validator.label(field.label || capitalize(name));
+  }
 
   if (field.messages) {
     validator = validator.messages(field.messages);
