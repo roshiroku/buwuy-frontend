@@ -38,7 +38,9 @@ export default class Schema {
 
   empty() {
     const res = {};
-    this.items.forEach((field) => res[field.name] = '');
+    this.items.forEach(({ type = 'object', ...field }) => {
+      res[field.name] = type === 'array' ? [] : '';
+    });
     return res;
   }
 }

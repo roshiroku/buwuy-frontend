@@ -1,10 +1,10 @@
 import Joi from 'joi';
 import { capitalize } from './string.utils';
 
-export function fieldValidator(name, field = {}) {
+export function fieldValidator(name, { type = 'object', ...field }) {
   let validator;
 
-  switch (field.type) {
+  switch (type) {
     case 'number':
       validator = Joi.number();
       break;
@@ -16,6 +16,13 @@ export function fieldValidator(name, field = {}) {
       break;
     case 'array':
       validator = Joi.array().items(fieldValidator(null, field.subtype));
+      break;
+    case 'object':
+      const schema = {};
+      for (const name in field) {
+        schema[name] = fieldValidator(name, field[name]);
+      }
+      validator = Joi.object(schema);
       break;
     default:
       validator = Joi.string();
