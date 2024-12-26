@@ -5,7 +5,7 @@ export const FileInput = ({ value: _value, onChange, error }) => {
 
   const handleInput = (e) => {
     setValue(e.target.value);
-    onChange(e, e.target.files[0]);
+    onChange(e.target.files[0]);
   };
 
   return (
@@ -16,12 +16,12 @@ export const FileInput = ({ value: _value, onChange, error }) => {
   );
 };
 
-export const TextInput = ({ type = 'text', value: _value, placeholder, onChange, error }) => {
-  const [value, setValue] = useState(_value);
+export const TextInput = ({ type = 'text', value, placeholder, onChange, error }) => {
+  // const [value, setValue] = useState(_value);
 
   const handleInput = (e) => {
-    setValue(e.target.value);
-    onChange(e, e.target.value);
+    // setValue(e.target.value);
+    onChange(e.target.value);
   };
 
   return (
@@ -32,12 +32,12 @@ export const TextInput = ({ type = 'text', value: _value, placeholder, onChange,
   );
 };
 
-export const TextArea = ({ value: _value, placeholder, onChange, error }) => {
-  const [value, setValue] = useState(_value);
+export const TextArea = ({ value, placeholder, onChange, error }) => {
+  // const [value, setValue] = useState(_value);
 
   const handleInput = (e) => {
-    setValue(e.target.value);
-    onChange(e, e.target.value);
+    // setValue(e.target.value);
+    onChange(e.target.value);
   };
 
   return (

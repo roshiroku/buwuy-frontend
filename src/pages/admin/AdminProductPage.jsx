@@ -1,37 +1,51 @@
-import { useParams } from 'react-router-dom';
-import { useProduct } from '../../services/product.service';
-import productSchema from '../../schema/product.schema';
+import { useCallback, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import productService, { useProduct } from '../../services/product.service';
+import { useProductForm } from '../../schema/product.schema';
 import { useCategories } from '../../providers/CategoryProvider';
 import { useTags } from '../../providers/TagProvider';
-import Form from '../../components/forms/Form';
 import AutoComplete from '../../components/forms/AutoComplete';
+import ImagesInput from '../../components/forms/ImagesInput';
 
 const AdminProductPage = () => {
   const { id } = useParams();
   const { product, isLoadingProduct } = useProduct(id);
   const { categories } = useCategories();
   const { tags } = useTags();
+  const imageFiles = useRef([]);
+  const navigate = useNavigate();
+
+  const handleSubmit = useCallback(async (values) => {
+    await productService.save({ ...values, imageFiles: imageFiles.current });
+    navigate('/admin/products');
+  }, [imageFiles]);
+
+  const {
+    values,
+    errors,
+    handlers,
+    inputs,
+    onSubmit
+  } = useProductForm({ default: product, handleSubmit });
 
   return !isLoadingProduct && (
-    <Form default={product} schema={productSchema}>
-      {(value, onChange) => (
-        <AutoComplete
-          key="category"
-          value={value}
-          onChange={onChange}
-          options={categories.map((cat) => [cat._id, cat.name])}
-        />
-      )}
-      {(value, onChange) => (
-        <AutoComplete
-          key="tags"
-          value={value}
-          onChange={onChange}
-          options={tags.map((tag) => [tag._id, tag.name])}
-          multiple
-        />
-      )}
-    </Form>
+    <form onSubmit={onSubmit}>
+      {inputs.name}
+      {inputs.description}
+      <AutoComplete
+        value={values.category}
+        onChange={handlers.category}
+        options={categories.map((cat) => [cat._id, cat.name])}
+      />
+      <AutoComplete
+        value={values.tags}
+        onChange={handlers.tags}
+        options={tags.map((tag) => [tag._id, tag.name])}
+        multiple
+      />
+      <ImagesInput values={values.images} onChange={handlers.images} files={imageFiles} />
+      <button type="submit">Save</button>
+    </form>
   );
 };
 
