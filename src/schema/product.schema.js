@@ -7,13 +7,13 @@ export const productFields = {
   images: {
     type: 'array',
     subtype: {
-      src: { type: 'sting', max: 256 },
-      alt: { type: 'sting', max: 128 },
-      description: { type: 'sting', max: 128 }
+      src: { type: 'string', max: 256 },
+      alt: { type: 'string', max: 128 },
+      description: { type: 'string', max: 128 }
     }
   },
   category: { type: 'string', max: 24 },
-  tags: { type: 'array', required: true, subtype: { type: 'sting', max: 24 } }
+  tags: { type: 'array', required: true, subtype: { type: 'string', max: 24 } }
 };
 
 const productSchema = new Schema(productFields);
