@@ -1,3 +1,4 @@
+import useSchemaForm from '../hooks/useSchemaForm';
 import Schema from './Schema';
 
 export const loginFields = {
@@ -14,4 +15,8 @@ export const loginFields = {
   }
 };
 
-export default new Schema(loginFields);
+const loginSchema = new Schema(loginFields);
+
+export const useLoginForm = (opts) => useSchemaForm(loginSchema, opts);
+
+export default loginSchema;

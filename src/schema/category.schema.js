@@ -1,3 +1,4 @@
+import useSchemaForm from '../hooks/useSchemaForm';
 import Schema from './Schema';
 
 export const categoryFields = {
@@ -6,4 +7,8 @@ export const categoryFields = {
   image: { type: 'file' }
 };
 
-export default new Schema(categoryFields);
+const categorySchema = new Schema(categoryFields);
+
+export const useCategoryForm = (opts) => useSchemaForm(categorySchema, opts);
+
+export default categorySchema;

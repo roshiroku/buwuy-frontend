@@ -1,3 +1,4 @@
+import useSchemaForm from '../hooks/useSchemaForm';
 import Schema from './Schema';
 import { loginFields } from './login.schema';
 
@@ -10,4 +11,8 @@ export const registerFields = {
   ...loginFields,
 };
 
-export default new Schema(registerFields);
+const registerSchema = new Schema(registerFields);
+
+export const useRegisterForm = (opts) => useSchemaForm(registerSchema, opts);
+
+export default registerSchema;
