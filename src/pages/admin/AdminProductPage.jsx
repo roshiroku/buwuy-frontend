@@ -1,4 +1,3 @@
-import { useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import productService, { useProduct } from '../../services/product.service';
 import { useProductForm } from '../../schema/product.schema';
@@ -12,13 +11,12 @@ const AdminProductPage = () => {
   const { product, isLoadingProduct } = useProduct(id);
   const { categories } = useCategories();
   const { tags } = useTags();
-  const imageFiles = useRef([]);
   const navigate = useNavigate();
 
-  const handleSubmit = useCallback(async (values) => {
-    await productService.save({ ...values, imageFiles: imageFiles.current });
+  const handleSubmit = async (values) => {
+    await productService.save(values);
     navigate('/admin/products');
-  }, [imageFiles]);
+  };
 
   const {
     values,
@@ -43,7 +41,7 @@ const AdminProductPage = () => {
         options={tags.map((tag) => [tag._id, tag.name])}
         multiple
       />
-      <ImagesInput values={values.images} onChange={handlers.images} files={imageFiles} />
+      <ImagesInput value={values.images} onChange={handlers.images} />
       <button type="submit">Save</button>
     </form>
   );

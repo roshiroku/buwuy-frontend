@@ -7,7 +7,7 @@ export const productFields = {
   images: {
     type: 'array',
     subtype: {
-      src: { type: 'string', max: 256 },
+      src: { type: 'file', max: 256, required: true },
       alt: { type: 'string', max: 128 },
       description: { type: 'string', max: 128 }
     }

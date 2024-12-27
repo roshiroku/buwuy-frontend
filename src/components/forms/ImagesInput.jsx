@@ -1,65 +1,79 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { remoteAsset } from '../../utils/url.utils';
+import ImageInput from './ImageInput';
 
-const ImagesInput = ({ values: _values = [], onChange, files }) => {
-  const [fileInput, setFileInput] = useState('');
-  const [values, setValues] = useState(_values);
+const ImagesInput = ({ value: _value = [], onChange }) => {
+  const [input, setInput] = useState(null);
+  const [images, setImages] = useState(_value);
 
-  const images = useMemo(() => {
-    return values.map(({ file, src, alt, description }) => ({ src: file ? '' : src, alt, description }));
-  }, [values]);
+  const value = useMemo(() => images.map((image) => ({
+    src: image.file || image.src,
+    alt: image.alt
+  })), [images]);
 
-  const handleChange = (i, value) => {
-    setValues(values.map((image, j) => j === i ? value : image));
-  };
+  const handleChange = useCallback((i, value) => {
+    setImages((prev) => prev.map((image, j) => j === i ? value : image));
+  }, []);
 
-  const handleUpload = async (files) => {
+  const handleUpload = useCallback(async () => {
     const images = [];
-    for (const file of [...files]) {
+    for (const file of [...input]) {
       const src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => resolve(e.target.result);
         reader.readAsDataURL(file);
       });
-      images.push({ file, src });
+      images.push({ file, src, alt: '' });
     }
-    setValues([...values, ...images.map(({ file, src }) => ({ file, src, alt: '', description: '' }))]);
-    setFileInput('');
-  };
+    setImages((prev) => [...prev, ...images]);
+  }, [input]);
 
-  const handleMove = (i, to) => {
-    if (to < 0 || to > values.length - 1) return;
-    const [image] = values.splice(i, 1);
-    values.splice(to, 0, image);
-    setValues([...values]);
-  };
+  const handleMove = useCallback((i, to) => {
+    setImages((prev) => {
+      if (to < 0 || to > prev.length - 1) return prev;
+      const [image] = prev.splice(i, 1);
+      prev.splice(to, 0, image);
+      return [...prev];
+    });
+  }, []);
 
-  const handleRemove = (i) => {
-    setValues(values.filter((_, j) => j !== i));
-  };
+  const handleRemove = useCallback((i) => {
+    setImages((prev) => prev.filter((_, j) => j !== i));
+  }, []);
+
+  const handleAdd = useCallback(async () => {
+    if (!input) return;
+    if (typeof input === 'string') {
+      setImages((prev) => [...prev, { src: input, alt: '' }]);
+    } else {
+      await handleUpload();
+    }
+    setInput(null);
+  }, [input]);
 
   useEffect(() => {
-    if (JSON.stringify(images) !== JSON.stringify(_values)) {
-      setValues(_values);
+    if (JSON.stringify(value) !== JSON.stringify(_value)) {
+      setImages(_value);
     }
-  }, [_values]);
+  }, [_value]);
 
   useEffect(() => {
-    if (JSON.stringify(images) !== JSON.stringify(_values)) {
-      onChange(images);
+    if (JSON.stringify(value) !== JSON.stringify(_value)) {
+      onChange(value);
     }
-    files.current = [];
-    for (const { file } of values) {
-      file && files.current.push(file);
-    }
-  }, [images]);
+  }, [value]);
 
   return (
     <div>
-      <input type="file" value={fileInput} accept="image/*" multiple onChange={(e) => handleUpload(e.target.files)} />
+      <div>
+        <ImageInput value={input} onChange={setInput} multiple />
+        <button type="button" onClick={handleAdd}>
+          add
+        </button>
+      </div>
       <ul>
-        {values.map((image, i) => (
-          <li key={`${image.file?.name || image.src}_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
+        {images.map((image, i) => (
+          <li key={i} style={{ display: 'flex', alignItems: 'center' }}>
             <img src={remoteAsset(image.src)} alt={image.alt} style={{
               width: '150px',
               aspectRatio: 1,
@@ -78,18 +92,12 @@ const ImagesInput = ({ values: _values = [], onChange, files }) => {
                 placeholder="alt"
                 onInput={(e) => handleChange(i, { ...image, alt: e.target.value })}
               />
-              <input
-                type="text"
-                value={image.description}
-                placeholder="description"
-                onInput={(e) => handleChange(i, { ...image, description: e.target.value })}
-              />
             </div>
             <div>
               {i > 0 && (
                 <button type="button" onClick={() => handleMove(i, i - 1)}>↑</button>
               )}
-              {i < values.length - 1 && (
+              {i < images.length - 1 && (
                 <button type="button" onClick={() => handleMove(i, i + 1)}>↓</button>
               )}
               <button type="button" onClick={() => handleRemove(i)}>remove</button>

@@ -12,7 +12,7 @@ export function fieldValidator(name, { type = 'object', ...field }) {
       validator = Joi.string().email({ tlds: { allow: false } });
       break;
     case 'file':
-      validator = Joi.alternatives().try(Joi.object(), Joi.string());
+      validator = Joi.alternatives().try(Joi.object(), fieldValidator(name, { type: 'string', ...field }));
       break;
     case 'array':
       validator = Joi.array().items(fieldValidator(null, field.subtype));
@@ -38,11 +38,11 @@ export function fieldValidator(name, { type = 'object', ...field }) {
     validator = validator.allow('');
   }
 
-  if ('min' in field) {
+  if ('min' in field && 'min' in validator) {
     validator = validator.min(field.min);
   }
 
-  if ('max' in field) {
+  if ('max' in field && 'max' in validator) {
     validator = validator.max(field.max);
   }
 
