@@ -30,6 +30,8 @@ const AdminProductPage = () => {
     <form onSubmit={onSubmit}>
       {inputs.name}
       {inputs.description}
+      {inputs.price}
+      {inputs.stock}
       <AutoComplete
         value={values.category}
         onChange={handlers.category}

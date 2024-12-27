@@ -8,12 +8,13 @@ export const productFields = {
     type: 'array',
     subtype: {
       src: { type: 'file', max: 256, required: true },
-      alt: { type: 'string', max: 128 },
-      description: { type: 'string', max: 128 }
+      alt: { type: 'string', max: 128 }
     }
   },
   category: { type: 'string', max: 24 },
-  tags: { type: 'array', required: true, subtype: { type: 'string', max: 24 } }
+  tags: { type: 'array', required: true, subtype: { type: 'string', max: 24 } },
+  price: { type: 'number', min: 0, required: true },
+  stock: { type: 'number', min: 0, required: true }
 };
 
 const productSchema = new Schema(productFields);
