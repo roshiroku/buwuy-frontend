@@ -36,6 +36,7 @@ const AdminProductsPage = () => {
       name: 'actions',
       parse: ({ _id }) => (
         <div>
+          <Link to={`/admin/products/${_id}/variants`}>variants</Link>
           <Link to={`/admin/products/${_id}`}>edit</Link>
           <button onClick={() => handleDelete(_id)}>delete</button>
         </div>
