@@ -11,6 +11,18 @@ const ImagesInput = ({ value: _value = [], onChange }) => {
     alt: image.alt
   })), [images]);
 
+  const hasChanged = useMemo(() => {
+    const [a, b] = [_value, value].map((value) => {
+      return JSON.stringify(value.map(({ src, ...image }) => ({
+        ...image,
+        src: src instanceof File ?
+          Object.getOwnPropertyNames(Object.getPrototypeOf(src)).map((name) => src[name]) :
+          src
+      })));
+    });
+    return a !== b;
+  }, [_value, value]);
+
   const handleChange = useCallback((i, value) => {
     setImages((prev) => prev.map((image, j) => j === i ? value : image));
   }, []);
@@ -52,15 +64,11 @@ const ImagesInput = ({ value: _value = [], onChange }) => {
   }, [input]);
 
   useEffect(() => {
-    if (JSON.stringify(value) !== JSON.stringify(_value)) {
-      setImages(_value);
-    }
+    if (hasChanged) setImages(_value);
   }, [_value]);
 
   useEffect(() => {
-    if (JSON.stringify(value) !== JSON.stringify(_value)) {
-      onChange(value);
-    }
+    if (hasChanged) onChange(value);
   }, [value]);
 
   return (
