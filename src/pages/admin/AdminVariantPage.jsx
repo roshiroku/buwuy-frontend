@@ -34,7 +34,7 @@ const AdminVariantPage = () => {
   }, [product, index]);
 
   return !isLoadingProduct && (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} noValidate>
       {inputs.name}
       {inputs.description}
       {inputs.price}

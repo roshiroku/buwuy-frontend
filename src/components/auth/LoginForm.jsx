@@ -12,7 +12,7 @@ const LoginForm = ({ onSuccess }) => {
   const { inputs, onSubmit } = useLoginForm({ handleSubmit });
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} noValidate>
       {inputs.email}
       {inputs.password}
       <button type="submit">Login</button>

@@ -27,7 +27,7 @@ const AdminProductPage = () => {
   } = useProductForm({ default: product, handleSubmit });
 
   return !isLoadingProduct && (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} noValidate>
       {inputs.name}
       {inputs.description}
       {inputs.price}

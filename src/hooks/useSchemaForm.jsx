@@ -38,7 +38,7 @@ export default function useSchemaForm(schema, { default: _default, handleChange,
       );
     });
     return inputs;
-  }, [schema, values]);
+  }, [schema, values, errors]);
 
   useEffect(() => {
     setValues(_default ?? schema.empty());

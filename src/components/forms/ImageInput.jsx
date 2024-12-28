@@ -1,73 +1,85 @@
 import { useEffect, useState } from 'react';
+import { remoteAsset } from '../../utils/url.utils';
 
-const ImageInput = ({ value: _value, onChange, multiple }) => {
-  const [value, setValue] = useState(_value);
+const ImageInput = ({ value, onChange }) => {
+  const [source, setSource] = useState(value && typeof value === 'string' ? 'url' : 'upload');
+  const [file, setFile] = useState(value instanceof File ? value : null);
   const [fileValue, setFileValue] = useState('');
-  const [source, setSource] = useState(typeof _value === 'string' ? 'url' : 'upload');
+  const [filePreview, setFilePreview] = useState('');
+  const [urlValue, setUrlValue] = useState(value && typeof value === 'string' ? value : '');
 
-  const handleSource = (e) => {
-    if (e.target.checked) {
-      setSource(e.target.value);
-      onChange(null);
-    }
-  };
-
-  const handleFile = (e) => {
-    const { files, value } = e.target;
+  const handleFileUpload = (e) => {
+    const { value, files } = e.target;
     setFileValue(value);
-    onChange(multiple ? files : files[0]);
+    setFile(files[0]);
+    onChange(files[0]);
   };
 
-  const handleUrl = (e) => {
+  const handleUrlChange = (e) => {
     const { value } = e.target;
-    setValue(value);
+    setUrlValue(value);
     onChange(value);
   };
 
-  useEffect(() => {
-    if (typeof _value === 'string') {
-      setValue(_value);
-      setFileValue('');
+  const handleSource = (e) => {
+    const { value, checked } = e.target;
+    if (!checked) return;
+    if (value === 'upload') {
+      setSource('upload');
+      onChange(file);
+    } else if (value === 'url') {
       setSource('url');
-    } else {
-      setValue('');
-      setFileValue(_value ? fileValue : '');
-      setSource(_value ? 'upload' : source);
+      onChange(urlValue);
     }
-  }, [_value]);
+  };
+
+  useEffect(() => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setFilePreview(e.target.result);
+      reader.readAsDataURL(file);
+    } else {
+      setFilePreview('');
+    }
+  }, [file]);
 
   return (
     <div>
-      <label>
-        <input
-          type="radio"
-          value="upload"
-          checked={source === 'upload'}
-          onChange={handleSource}
-        />
-        file upload
-      </label>
-      <label>
-        <input
-          type="radio"
-          value="url"
-          checked={source === 'url'}
-          onChange={handleSource}
-        />
-        web url
-      </label>
-      {source === 'upload' && (
+      <div>
+        <label>
+          <input
+            type="radio"
+            value="upload"
+            checked={source === 'upload'}
+            onChange={handleSource}
+          />
+          file upload
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="url"
+            checked={source === 'url'}
+            onChange={handleSource}
+          />
+          web url
+        </label>
         <input
           type="file"
           value={fileValue}
           accept="image/*"
-          multiple={multiple}
-          onChange={handleFile}
+          onChange={handleFileUpload}
+          style={{ display: source === 'url' ? 'none' : '' }}
         />
-      )}
-      {source === 'url' && (
-        <input type="text" value={value || ''} onChange={handleUrl} />
-      )}
+        {source === 'url' && (
+          <input type="text" value={urlValue} onChange={handleUrlChange} />
+        )}
+      </div>
+      <img src={source === 'upload' ? filePreview : remoteAsset(urlValue)} alt="preview" style={{
+        width: '150px',
+        aspectRatio: 1,
+        objectFit: 'cover'
+      }} />
     </div>
   );
 };

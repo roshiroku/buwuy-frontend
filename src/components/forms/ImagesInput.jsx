@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { remoteAsset } from '../../utils/url.utils';
-import ImageInput from './ImageInput';
 
 const ImagesInput = ({ value: _value = [], onChange }) => {
-  const [input, setInput] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
   const [images, setImages] = useState(_value);
 
   const value = useMemo(() => images.map((image) => ({
@@ -27,9 +26,9 @@ const ImagesInput = ({ value: _value = [], onChange }) => {
     setImages((prev) => prev.map((image, j) => j === i ? value : image));
   }, []);
 
-  const handleUpload = useCallback(async () => {
+  const handleUpload = useCallback(async (files) => {
     const images = [];
-    for (const file of [...input]) {
+    for (const file of [...files]) {
       const src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => resolve(e.target.result);
@@ -38,30 +37,24 @@ const ImagesInput = ({ value: _value = [], onChange }) => {
       images.push({ file, src, alt: '' });
     }
     setImages((prev) => [...prev, ...images]);
-  }, [input]);
+  }, []);
 
   const handleMove = useCallback((i, to) => {
-    setImages((prev) => {
-      if (to < 0 || to > prev.length - 1) return prev;
-      const [image] = prev.splice(i, 1);
-      prev.splice(to, 0, image);
-      return [...prev];
-    });
-  }, []);
+    if (to < 0 || to > images.length - 1) return;
+    const [image] = images.splice(i, 1);
+    images.splice(to, 0, image);
+    setImages([...images]);
+  }, [images]);
 
   const handleRemove = useCallback((i) => {
     setImages((prev) => prev.filter((_, j) => j !== i));
   }, []);
 
-  const handleAdd = useCallback(async () => {
-    if (!input) return;
-    if (typeof input === 'string') {
-      setImages((prev) => [...prev, { src: input, alt: '' }]);
-    } else {
-      await handleUpload();
-    }
-    setInput(null);
-  }, [input]);
+  const addImageUrl = useCallback(async () => {
+    if (!imageUrl) return;
+    setImages((prev) => [...prev, { src: imageUrl, alt: '' }]);
+    setImageUrl('');
+  }, [imageUrl]);
 
   useEffect(() => {
     if (hasChanged) setImages(_value);
@@ -74,14 +67,17 @@ const ImagesInput = ({ value: _value = [], onChange }) => {
   return (
     <div>
       <div>
-        <ImageInput value={input} onChange={setInput} multiple />
-        <button type="button" onClick={handleAdd}>
+        <input type="file" value={''} onChange={(e) => handleUpload(e.target.files)} accept="image/*" multiple />
+      </div>
+      <div>
+        <input type="text" value={imageUrl} onInput={(e) => setImageUrl(e.target.value)} />
+        <button type="button" onClick={addImageUrl}>
           add
         </button>
       </div>
       <ul>
         {images.map((image, i) => (
-          <li key={i} style={{ display: 'flex', alignItems: 'center' }}>
+          <li key={`${image.file?.name || image.src}_${i}`} style={{ display: 'flex', alignItems: 'center' }}>
             <img src={remoteAsset(image.src)} alt={image.alt} style={{
               width: '150px',
               aspectRatio: 1,

@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCategoryForm } from '../../schema/category.schema';
 import categoryService from '../../services/category.service';
 import { useCategories } from '../../providers/CategoryProvider';
+import ImageInput from '../../components/forms/ImageInput';
 
 const AdminCategoryPage = () => {
   const { categories, setCategories, isLoadingCategories } = useCategories();
@@ -21,11 +22,13 @@ const AdminCategoryPage = () => {
     navigate('/admin/categories');
   };
 
-  const { inputs, onSubmit } = useCategoryForm({ default: category, handleSubmit });
+  const { values, handlers, inputs, onSubmit } = useCategoryForm({ default: category, handleSubmit });
 
   return !isLoadingCategories && (
-    <form onSubmit={onSubmit}>
-      {Object.values(inputs)}
+    <form onSubmit={onSubmit} noValidate>
+      {inputs.name}
+      {inputs.description}
+      <ImageInput value={values.image} onChange={handlers.image} />
       <button type="submit">Save</button>
     </form>
   );

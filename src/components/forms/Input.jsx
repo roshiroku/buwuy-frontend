@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const FileInput = ({ value: _value, onChange, error }) => {
+export const FileInput = ({ value: _value, onChange }) => {
   const [value, setValue] = useState('');
 
   const handleInput = (e) => {
@@ -8,55 +8,35 @@ export const FileInput = ({ value: _value, onChange, error }) => {
     onChange(e.target.files[0]);
   };
 
-  return (
-    <>
-      <input type='file' value={value} onInput={handleInput} />
-      {error && <span>{error}</span>}
-    </>
-  );
+  return <input type='file' value={value} onInput={handleInput} />;
 };
 
-export const TextInput = ({ type = 'text', value, placeholder, onChange, error }) => {
-  // const [value, setValue] = useState(_value);
+const Input = ({
+  type,
+  onChange,
+  error,
+  validate,
+  ...props
+}) => {
+  let el;
 
-  const handleInput = (e) => {
-    // setValue(e.target.value);
-    onChange(e.target.value);
-  };
-
-  return (
-    <>
-      <input type={type} value={value} placeholder={placeholder} onInput={handleInput} />
-      {error && <span>{error}</span>}
-    </>
-  );
-};
-
-export const TextArea = ({ value, placeholder, onChange, error }) => {
-  // const [value, setValue] = useState(_value);
-
-  const handleInput = (e) => {
-    // setValue(e.target.value);
-    onChange(e.target.value);
-  };
-
-  return (
-    <>
-      <textarea value={value} placeholder={placeholder} onInput={handleInput} />
-      {error && <span>{error}</span>}
-    </>
-  );
-};
-
-const Input = ({ value, placeholder, type, onChange, error }) => {
   switch (type) {
     case 'file':
-      return <FileInput {...{ value, onChange, error }} />;
+      el = <FileInput onChange={onChange} {...props} />;
+      break;
     case 'text':
-      return <TextArea {...{ value, placeholder, onChange, error }} />;
+      el = <textarea onInput={(e) => onChange(e.target.value)} {...props} />;
+      break;
     default:
-      return <TextInput {...{ type, value, placeholder, onChange, error }} />
+      el = <input type={type} onInput={(e) => onChange(e.target.value)} {...props} />;
   }
+
+  return (
+    <>
+      {el}
+      {error && <span>{error}</span>}
+    </>
+  )
 };
 
 export default Input;
