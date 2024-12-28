@@ -29,6 +29,16 @@ const AdminVariantsPage = () => {
       label: 'Description'
     },
     {
+      name: 'price',
+      label: 'Price',
+      sortable: true
+    },
+    {
+      name: 'stock',
+      label: 'Stock',
+      sortable: true
+    },
+    {
       name: 'actions',
       parse: (variant) => (
         <div>

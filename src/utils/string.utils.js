@@ -7,6 +7,6 @@ export function capitalize(str) {
 }
 
 export function isDate(str) {
-  const [yyyy, MM, dd, HH, mm, ss, ms] = str?.split(/[-T:.Z]/) || [];
+  const [yyyy, MM, dd, HH, mm, ss, ms] = typeof str === 'string' ? str.split(/[-T:.Z]/) : [];
   return ![yyyy, MM, dd, HH, mm, ss, ms].some((num) => isNaN(num));
 }

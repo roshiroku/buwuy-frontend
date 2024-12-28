@@ -4,6 +4,7 @@ import DataTable from '../../components/table/DataTable';
 import { remoteAsset } from '../../utils/url.utils';
 
 const AdminProductsPage = () => {
+  /** @todo use url params */
   const { products, setProducts, isLoadingProducts } = useProducts();
 
   const columns = [
@@ -26,6 +27,16 @@ const AdminProductsPage = () => {
     {
       name: 'description',
       label: 'Description'
+    },
+    {
+      name: 'price',
+      label: 'Price',
+      sortable: true
+    },
+    {
+      name: 'stock',
+      label: 'Stock',
+      sortable: true
     },
     {
       name: 'createdAt',

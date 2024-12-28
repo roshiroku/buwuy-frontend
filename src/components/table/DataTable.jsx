@@ -18,6 +18,23 @@ function parse(row, col) {
   return value;
 }
 
+function getSorting(sortBy, sortDesc) {
+  return (a, b) => {
+    a = a[sortBy];
+    b = b[sortBy];
+
+    if (typeof a === 'string') {
+      return (sortDesc ? -1 : 1) * a.localeCompare(b);
+    }
+
+    if (typeof a === 'number') {
+      return (sortDesc ? -1 : 1) * (a - b);
+    }
+
+    return 0;
+  };
+}
+
 const DataTable = ({
   columns,
   rows: _rows,
@@ -49,9 +66,7 @@ const DataTable = ({
   };
 
   const rows = useMemo(() => {
-    return [..._rows]
-      .sort((a, b) => (sortDesc ? -1 : 1) * a[sortBy].localeCompare(b[sortBy]))
-      .slice(skip, skip + limit);
+    return [..._rows].sort(getSorting(sortBy, sortDesc)).slice(skip, skip + limit);
   }, [_rows, sort, skip, limit]);
 
   return (
