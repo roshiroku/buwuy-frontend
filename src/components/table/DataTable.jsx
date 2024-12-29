@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import Pagination from '../layout/Pagination';
 import { isDate } from '../../utils/string.utils';
 
 function parse(row, col) {
@@ -47,12 +48,10 @@ const DataTable = ({
   limitParam = 'limit',
   limitOptions = [5, 10, 20]
 }) => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const sort = searchParams.get(sortParam) || _sort;
   const page = Number(searchParams.get(pageParam)) || _page;
   const limit = Number(searchParams.get(limitParam)) || _limit;
-  const pageCount = Math.ceil(count / limit);
   const sortDesc = sort.startsWith('-');
   const sortBy = sortDesc ? sort.substring(1) : sort;
   const skip = (page - 1) * limit;
@@ -69,7 +68,6 @@ const DataTable = ({
     if (_rows.length === count) {
       return _rows.sort(getSorting(sortBy, sortDesc)).slice(skip, skip + limit);
     }
-
     return _rows;
   }, [_rows, count, sort, skip, limit]);
 
@@ -104,26 +102,7 @@ const DataTable = ({
           ))}
         </tbody>
       </table>
-      <div>
-        {limitOptions.length > 1 && (
-          <select value={limit} onChange={(e) => navigate(getUrl({ limit: e.target.value }))}>
-            {limitOptions.map((option) => (
-              <option key={option}>{option}</option>
-            ))}
-          </select>
-        )}
-        {pageCount > 1 && (
-          <div>
-            {[...Array(pageCount)].map((_, i) => (
-              i + 1 === page ? i + 1 : (
-                <Link to={getUrl({ page: i + 1 })} key={i}>
-                  {i + 1}
-                </Link>
-              )
-            ))}
-          </div>
-        )}
-      </div>
+      <Pagination count={count} limitOptions={limitOptions} />
     </div>
   );
 };

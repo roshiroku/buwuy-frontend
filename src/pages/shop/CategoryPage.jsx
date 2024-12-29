@@ -1,17 +1,22 @@
 import { useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useCategories } from '../../providers/CategoryProvider';
 import { useProducts } from '../../services/product.service';
+import { useCategories } from '../../providers/CategoryProvider';
+import Pagination from '../../components/layout/Pagination';
 import ProductCard from '../../components/shop/ProductCard';
 
 const CategoryPage = () => {
   const { categorySlug } = useParams();
-  const { page = 1, limit = 5 } = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const page = Number(searchParams.get('page')) || 1;
+  const limit = Number(searchParams.get('limit')) || 5;
+  const sort = searchParams.get('sort') || 'name';
   const { categories, isLoadingCategories } = useCategories();
-  const { products, isLoadingProducts } = useProducts({
+  const { products, countProducts, isLoadingProducts } = useProducts({
     categorySlug,
+    skip: (page - 1) * limit,
     limit,
-    skip: (page - 1) * limit
+    sort
   });
 
   const category = useMemo(() => categories.find(({ slug }) => slug === categorySlug), [
@@ -25,17 +30,20 @@ const CategoryPage = () => {
       <div>
         {isLoadingCategories ? 'loading...' : category.description}
       </div>
-      <ul>
-        {isLoadingProducts ? (
-          <></>
-        ) : (
-          products.map((product) => (
-            <li key={product._id}>
-              <ProductCard href={`/shop/${category.slug}/${product.slug}`} product={product} />
-            </li>
-          ))
+      <div>
+        {isLoadingCategories || isLoadingProducts ? 'loading...' : (
+          <>
+            <ul>
+              {products.map((product) => (
+                <li key={product._id}>
+                  <ProductCard href={`/shop/${category.slug}/${product.slug}`} product={product} />
+                </li>
+              ))}
+            </ul>
+            <Pagination count={countProducts} />
+          </>
         )}
-      </ul>
+      </div>
     </div>
   )
 };
