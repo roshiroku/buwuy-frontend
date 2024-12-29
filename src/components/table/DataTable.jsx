@@ -66,8 +66,12 @@ const DataTable = ({
   };
 
   const rows = useMemo(() => {
-    return [..._rows].sort(getSorting(sortBy, sortDesc)).slice(skip, skip + limit);
-  }, [_rows, sort, skip, limit]);
+    if (_rows.length === count) {
+      return _rows.sort(getSorting(sortBy, sortDesc)).slice(skip, skip + limit);
+    }
+
+    return _rows;
+  }, [_rows, count, sort, skip, limit]);
 
   return (
     <div>

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 
 export default function useModels(service, config = {}, setConfig = undefined) {
   const [models, setModels] = useState([]);
+  const [count, setCount] = useState(0);
   const [params, setParams] = useState(config);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -10,8 +11,10 @@ export default function useModels(service, config = {}, setConfig = undefined) {
   const getModels = useCallback(async () => {
     try {
       setIsLoading(true);
-      const models = await service.find(params);
+      const res = await service.find(params);
+      const [models, count] = Array.isArray(res) ? [res, res.length] : [res.results, res.count];
       setModels(models);
+      setCount(count);
     } finally {
       setIsLoading(false);
     }
@@ -30,11 +33,13 @@ export default function useModels(service, config = {}, setConfig = undefined) {
     setModels,
     isLoading,
     setIsLoading,
+    count,
+    setCount,
     params: params,
     setParams: _setParams,
     skip: params.skip,
     setSkip: (skip) => _setParams({ ...params, skip }),
     limit: params.limit,
     setLimit: (limit) => _setParams({ ...params, limit }),
-  }), [models, isLoading, params, _setParams]);
+  }), [models, count, isLoading, params, _setParams]);
 }

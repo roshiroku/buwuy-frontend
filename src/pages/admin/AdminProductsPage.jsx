@@ -1,11 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import productService, { useProducts } from '../../services/product.service';
 import DataTable from '../../components/table/DataTable';
 import { remoteAsset } from '../../utils/url.utils';
 
 const AdminProductsPage = () => {
   /** @todo use url params */
-  const { products, setProducts, isLoadingProducts } = useProducts();
+  const [searchParams] = useSearchParams();
+  const sort = searchParams.get('sort') || 'name';
+  const page = Number(searchParams.get('page')) || 1;
+  const limit = Number(searchParams.get('limit')) || 5;
+  const {
+    products,
+    setProducts,
+    countProducts: count,
+    setCountProducts: setCount,
+    isLoadingProducts
+  } = useProducts({ skip: (page - 1) * limit, limit, sort });
 
   const columns = [
     {
@@ -59,12 +69,13 @@ const AdminProductsPage = () => {
     if (!confirm('delete product?')) return;
     await productService.delete(id);
     setProducts(products.filter(({ _id }) => _id !== id));
+    setCount((prev) => prev - 1);
   };
 
   return (
     <div>
       <Link to="/admin/product">Add Product</Link>
-      <DataTable columns={columns} rows={products} />
+      <DataTable columns={columns} rows={products} count={count} />
     </div>
   );
 };
