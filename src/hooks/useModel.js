@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
-export default function useModel(service, input) {
+export default function useModel(service, input, singleton) {
   const [model, setModel] = useState(typeof input === 'object' ? input : null);
-  const [isLoading, setIsLoading] = useState(!(model || !input));
+  const [isLoading, setIsLoading] = useState(!model && (singleton || input));
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   const loadModel = async (modelId) => {
     try {
       setIsLoading(true);
@@ -45,9 +45,9 @@ export default function useModel(service, input) {
       setModel(input);
     } else {
       setModel(null);
-      input && loadModel(input);
+      (singleton || input) && loadModel(input);
     }
-  }, [input]);
+  }, [input, singleton]);
 
   return useMemo(() => ({
     model,

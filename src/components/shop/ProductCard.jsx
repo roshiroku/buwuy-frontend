@@ -1,6 +1,8 @@
+import { useCart } from '../../providers/CartProvider';
 import { remoteAsset } from '../../utils/url.utils';
 
 const ProductCard = ({ href, product }) => {
+  const { updateCart, openCart } = useCart();
   const [primaryImage = {}] = product.images;
   const Component = href ? 'a' : 'div';
 
@@ -14,12 +16,14 @@ const ProductCard = ({ href, product }) => {
           aspectRatio: 1
         }} />
         <h3>{product.name}</h3>
-        <p>{product.description}</p>
-        <p>
-          Price: {product.price},
-          Stock: {product.stock}
-        </p>
+        <p>{product.byline}</p>
+        <p>Price: {product.price}</p>
       </Component>
+      <div>
+        <button onClick={() => updateCart(product, 1) && openCart()}>
+          Add
+        </button>
+      </div>
     </div>
   );
 };

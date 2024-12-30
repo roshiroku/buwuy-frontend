@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as authService from '../services/auth.service';
+import { removeStorageCart } from '../services/cart.service';
 
 export const AuthContext = createContext({});
 
@@ -12,12 +13,14 @@ const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const user = await authService.login(email, password);
     setUser(user);
+    removeStorageCart();
     return user;
   };
 
   const register = async (data) => {
     const user = await authService.register(data);
     setUser(user);
+    removeStorageCart();
     return user;
   };
 

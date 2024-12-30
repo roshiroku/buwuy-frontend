@@ -1,6 +1,7 @@
 import { Outlet, Route, Routes } from 'react-router-dom';
 import TagProvider from './providers/TagProvider';
 import CategoryProvider from './providers/CategoryProvider';
+import CartProvider from './providers/CartProvider';
 import Authorize from './components/auth/Authorize';
 import GuestOnly from './components/auth/GuestOnly';
 import Layout from './components/layout/Layout';
@@ -31,7 +32,13 @@ export default () => {
           </TagProvider>
         </CategoryProvider>
       )}>
-        <Route element={<Layout><Outlet /></Layout>}>
+        <Route element={(
+          <CartProvider>
+            <Layout>
+              <Outlet />
+            </Layout>
+          </CartProvider>
+        )}>
           <Route index element={<HomePage />} />
           <Route element={<GuestOnly><Outlet /></GuestOnly>}>
             <Route path="login" element={<LoginPage />} />

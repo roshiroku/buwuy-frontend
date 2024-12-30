@@ -8,6 +8,20 @@ export default function useModelService(service, { name = 'model' }) {
   const [Single, Plural] = [ucFirst(single), ucFirst(plural)];
 
   return {
+    [`use${Single}Singleton`]: (input) => {
+      const model = useModel(service, input, true);
+      return useMemo(() => {
+        const ctx = {};
+        for (const k in model) {
+          if (k.match(/model/i)) {
+            ctx[k.replace('model', single).replace('Model', Single)] = model[k];
+          } else {
+            ctx[k + Single] = model[k];
+          }
+        }
+        return ctx;
+      }, [model]);
+    },
     [`use${Single}`]: (input) => {
       const model = useModel(service, input);
       return useMemo(() => {
