@@ -34,7 +34,13 @@ class CartService extends ModelService {
 
   async save(model) {
     const method = model._id ? 'put' : 'post';
-    const { data } = await axios[method](this.baseUrl, toFormData(model));
+    const { data } = await axios[method](this.baseUrl, toFormData({
+      ...model,
+      products: model.products.map((item) => ({
+        product: item.product._id,
+        amount: item.amount
+      }))
+    }));
     return data;
   }
 

@@ -18,16 +18,22 @@ const CartProvider = ({ children }) => {
     const { _id } = product;
     const index = cart.products.findIndex((item) => item.product._id === _id);
     const item = cart.products[index] || {
-      product: pick(product, '_id', 'name', 'images', 'price'),
+      product: pick(product, '_id', 'name', 'images', 'price', 'stock'),
       amount: 0
     };
 
     if (item.amount + amount <= product.stock) {
       item.amount += amount;
+    }
 
-      if (index === -1) {
-        cart.products.push(item);
-      }
+    if (index === -1 && item.amount > 0) {
+      cart.products.push(item);
+    } else if (index > -1 && item.amount < 1) {
+      cart.products.splice(index, 1);
+    }
+
+    if (!cart.products.length) {
+      setShowCart(false);
     }
 
     setCart({ ...cart });
