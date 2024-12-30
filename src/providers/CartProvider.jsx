@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { getStorageCart, setStorageCart, useCart as useModel } from '../services/cart.service';
+import { createContext, useContext, useEffect, useState } from 'react';
+import cartService, { getStorageCart, setStorageCart, useCart as useModel } from '../services/cart.service';
 import productService from '../services/product.service';
 import { useAuth } from './AuthProvider';
 import { pick } from '../utils/object.utils';
@@ -50,6 +50,16 @@ const CartProvider = ({ children }) => {
     }
   };
 
+  const clearCart = async () => {
+    setCart({ products: [] });
+
+    if (user) {
+      await cartService.delete();
+    } else {
+      setStorageCart({ products: [] });
+    }
+  };
+
   useEffect(() => {
     const cart = getStorageCart();
     if (cart.products?.length) {
@@ -74,6 +84,7 @@ const CartProvider = ({ children }) => {
     setCart,
     saveCart,
     updateCart,
+    clearCart,
     showCart,
     setShowCart,
     openCart: () => setShowCart(true),

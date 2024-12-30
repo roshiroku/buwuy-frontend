@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../providers/AuthProvider';
 import { useCart } from '../../providers/CartProvider';
 import LogoText from './LogoText';
-import MiniCart from './MiniCart';
+import MiniCart from '../cart/MiniCart';
 
 const Header = () => {
   const { user, isLoading, logout } = useAuth();
