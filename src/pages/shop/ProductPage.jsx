@@ -2,9 +2,11 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import { useProduct, useProducts } from '../../services/product.service';
+import { useCart } from '../../providers/CartProvider';
 import ProductImages from '../../components/shop/ProductImages';
 
 const ProductPage = () => {
+  const { updateCart } = useCart();
   const { productSlug: slug } = useParams();
   const { products } = useProducts({ slug, limit: 1 });
   const { product } = useProduct(products[0]);
@@ -37,7 +39,7 @@ const ProductPage = () => {
                 <b>Price:</b>
                 {product.price}
               </div>
-              <button disabled={!product.stock}>
+              <button disabled={!product.stock} onClick={() => updateCart(product, 1)}>
                 {product.stock ? 'Add To Cart' : 'Out Of Stock'}
               </button>
             </>

@@ -16,20 +16,22 @@ const ProductImages = ({ images }) => {
         objectFit: 'cover',
         aspectRatio: 1
       }} />
-      <ul style={{ display: 'flex' }}>
-        {images.map((image, i) => (
-          <li key={i}>
-            <button onClick={() => setSelectedImage(image)}>
-              <img src={remoteAsset(image.src)} alt={image.alt} style={{
-                display: 'block',
-                maxWidth: '150px',
-                objectFit: 'cover',
-                aspectRatio: 1
-              }} />
-            </button>
-          </li>
-        ))}
-      </ul>
+      {images.length > 1 && (
+        <ul style={{ display: 'flex' }}>
+          {images.map((image, i) => (
+            <li key={i}>
+              <button onClick={() => setSelectedImage(image)}>
+                <img src={remoteAsset(image.src)} alt={image.alt} style={{
+                  display: 'block',
+                  maxWidth: '150px',
+                  objectFit: 'cover',
+                  aspectRatio: 1
+                }} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
