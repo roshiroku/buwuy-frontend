@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import { useCategories as useModels } from '../services/category.service';
 
-export const CategoryContext = createContext();
+export const CategoryContext = createContext({});
 
 export const useCategories = () => useContext(CategoryContext);
 

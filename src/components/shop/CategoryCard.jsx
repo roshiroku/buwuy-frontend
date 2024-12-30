@@ -11,7 +11,7 @@ const CategoryCard = ({ href, category }) => {
         aspectRatio: 1
       }} />
       <h6>{category.name}</h6>
-      <p>{category.description}</p>
+      <p>{category.byline}</p>
     </Component>
   );
 };
