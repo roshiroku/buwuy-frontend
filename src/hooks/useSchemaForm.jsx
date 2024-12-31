@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Input from '../components/forms/Input';
 
-export default function useSchemaForm(schema, { default: _default, handleChange, handleSubmit }) {
+export default function useSchemaForm(schema, { default: _default, handleChange, handleSubmit } = {}) {
   const [values, setValues] = useState(_default ?? schema.empty());
   const [errors, setErrors] = useState({});
 

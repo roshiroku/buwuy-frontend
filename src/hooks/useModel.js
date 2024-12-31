@@ -43,6 +43,7 @@ export default function useModel(service, input, singleton) {
   useEffect(() => {
     if (typeof input === 'object') {
       setModel(input);
+      setIsLoading(!input);
     } else {
       setModel(null);
       (singleton || input) && loadModel(input);

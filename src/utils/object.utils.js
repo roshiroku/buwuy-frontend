@@ -19,23 +19,23 @@ export function omit(obj, ...props) {
   return res;
 }
 
-export function deflateObject(obj, prefix = '') {
-  let formData = {};
+export function deflateObject(obj, depth = null, prefix = '') {
+  let values = {};
 
   for (const name in obj) {
     const value = obj[name];
 
-    if (typeof value === 'object') {
-      formData = {
-        ...formData,
-        ...deflateObject(value, `${prefix}${name}.`)
+    if (typeof value === 'object' && depth) {
+      values = {
+        ...values,
+        ...deflateObject(value, depth - 1, `${prefix}${name}.`)
       };
     } else {
-      formData[prefix + name] = value;
+      values[prefix + name] = value;
     }
   }
 
-  return formData;
+  return values;
 }
 
 export function inflateObject(obj) {
