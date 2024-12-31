@@ -11,6 +11,10 @@ import RegisterPage from './pages/auth/RegisterPage';
 import ShopPage from './pages/shop/ShopPage';
 import CategoryPage from './pages/shop/CategoryPage';
 import ProductPage from './pages/shop/ProductPage';
+import CheckoutPage from './pages/checkout/CheckoutPage';
+import ShipmentPage from './pages/checkout/ShipmentPage';
+import PaymentPage from './pages/checkout/PaymentPage';
+import CheckoutSuccessPage from './pages/checkout/CheckoutSuccessPage';
 import AdminLayout from './components/admin/layout/AdminLayout';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminPage from './pages/admin/AdminPage';
@@ -47,6 +51,10 @@ export default () => {
           <Route path="shop" element={<ShopPage />} />
           <Route path="shop/:categorySlug" element={<CategoryPage />} />
           <Route path="shop/:categorySlug/:productSlug" element={<ProductPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="checkout/shipment" element={<ShipmentPage />} />
+          <Route path="checkout/payment/:id" element={<PaymentPage />} />
+          <Route path="checkout/success/:id" element={<CheckoutSuccessPage />} />
         </Route>
         <Route path="admin" element={<AdminLayout><Outlet /></AdminLayout>}>
           <Route element={<Authorize redirect="/admin/login"><Outlet /></Authorize>}>
