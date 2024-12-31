@@ -14,7 +14,9 @@ export function getStorageCart() {
   }
 }
 
-export const setStorageCart = (cart) => sessionStorage.setItem(CART_KEY, JSON.stringify(cart));
+export function setStorageCart(cart) {
+  sessionStorage.setItem(CART_KEY, JSON.stringify(cartService.normalize(cart)));
+};
 
 export const removeStorageCart = () => sessionStorage.removeItem(CART_KEY);
 
@@ -34,19 +36,23 @@ class CartService extends ModelService {
 
   async save(model) {
     const method = model._id ? 'put' : 'post';
-    const { data } = await axios[method](this.baseUrl, toFormData({
-      ...model,
-      products: model.products.map((item) => ({
-        product: item.product._id,
-        amount: item.amount
-      }))
-    }));
+    const { data } = await axios[method](this.baseUrl, toFormData(this.normalize(model)));
     return data;
   }
 
   async delete() {
     const { data } = await axios.delete(this.baseUrl);
     return data;
+  }
+
+  normalize({ products, ...data }) {
+    return {
+      ...data,
+      products: products.map(({ product, amount }) => ({
+        product: typeof product === 'object' ? product._id : product,
+        amount
+      }))
+    };
   }
 }
 

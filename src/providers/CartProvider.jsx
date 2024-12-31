@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import cartService, { getStorageCart, setStorageCart, useCart as useModel } from '../services/cart.service';
 import productService from '../services/product.service';
 import { useAuth } from './AuthProvider';
@@ -10,9 +10,14 @@ export const useCart = () => useContext(CartContext);
 
 const CartProvider = ({ children }) => {
   const [showCart, setShowCart] = useState(false);
-  const [localCart, setLocalCart] = useState({ products: [] });
+  const [localCart, setLocalCart] = useState(null);
   const { user } = useAuth();
-  const { cart, setCart, saveCart, ...model } = useModel(user ? undefined : localCart);
+
+  const { cart, setCart, saveCart, isLoadingCart } = useModel(user ? undefined : localCart);
+
+  const subtotal = useMemo(() => cart?.products.reduce((total, item) => {
+    return total + item.product.price * item.amount;
+  }, 0) || 0, [cart]);
 
   const updateCart = async (product, amount) => {
     const { _id } = product;
@@ -41,12 +46,7 @@ const CartProvider = ({ children }) => {
     if (user) {
       await saveCart();
     } else {
-      setStorageCart({
-        products: cart.products.map((item) => ({
-          product: item.product._id,
-          amount: item.amount
-        }))
-      });
+      setStorageCart(cart);
     }
   };
 
@@ -74,8 +74,11 @@ const CartProvider = ({ children }) => {
             products.push({ product, amount });
           }
         }
+
         setLocalCart({ products });
       });
+    } else {
+      setLocalCart({ products: [] });
     }
   }, []);
 
@@ -85,12 +88,13 @@ const CartProvider = ({ children }) => {
     saveCart,
     updateCart,
     clearCart,
+    isLoadingCart,
+    subtotal,
     showCart,
     setShowCart,
     openCart: () => setShowCart(true),
     closeCart: () => setShowCart(false),
-    toggleCart: () => setShowCart(!showCart),
-    ...model
+    toggleCart: () => setShowCart(!showCart)
   };
 
   return (
