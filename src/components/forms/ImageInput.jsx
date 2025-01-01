@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react';
+import { Box, FormControl, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { remoteAsset } from '../../utils/url.utils';
+import Input from './Input';
 
 const ImageInput = ({ value, onChange }) => {
   const [source, setSource] = useState(value && typeof value === 'string' ? 'url' : 'upload');
   const [file, setFile] = useState(value instanceof File ? value : null);
-  const [fileValue, setFileValue] = useState('');
   const [filePreview, setFilePreview] = useState('');
   const [urlValue, setUrlValue] = useState(value && typeof value === 'string' ? value : '');
 
-  const handleFileUpload = (e) => {
-    const { value, files } = e.target;
-    setFileValue(value);
-    setFile(files[0]);
-    onChange(files[0]);
+  const handleFileUpload = (file) => {
+    setFile(file);
+    onChange(file);
   };
 
   const handleUrlChange = (e) => {
@@ -21,14 +20,12 @@ const ImageInput = ({ value, onChange }) => {
     onChange(value);
   };
 
-  const handleSource = (e) => {
-    const { value, checked } = e.target;
-    if (!checked) return;
-    if (value === 'upload') {
-      setSource('upload');
+  const handleSourceChange = (e) => {
+    const newSource = e.target.value;
+    setSource(newSource);
+    if (newSource === 'upload') {
       onChange(file);
-    } else if (value === 'url') {
-      setSource('url');
+    } else if (newSource === 'url') {
       onChange(urlValue);
     }
   };
@@ -43,44 +40,51 @@ const ImageInput = ({ value, onChange }) => {
     }
   }, [file]);
 
+  const previewImage = source === 'upload' ? filePreview : remoteAsset(urlValue);
+  const isValidPreview = !!(previewImage && (source === 'url' ? urlValue : file));
+
   return (
-    <div>
-      <div>
-        <label>
-          <input
-            type="radio"
-            value="upload"
-            checked={source === 'upload'}
-            onChange={handleSource}
-          />
-          file upload
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="url"
-            checked={source === 'url'}
-            onChange={handleSource}
-          />
-          web url
-        </label>
-        <input
-          type="file"
-          value={fileValue}
-          accept="image/*"
-          onChange={handleFileUpload}
-          style={{ display: source === 'url' ? 'none' : '' }}
-        />
-        {source === 'url' && (
-          <input type="text" value={urlValue} onChange={handleUrlChange} />
-        )}
-      </div>
-      <img src={source === 'upload' ? filePreview : remoteAsset(urlValue)} alt="preview" style={{
-        width: '150px',
-        aspectRatio: 1,
-        objectFit: 'cover'
-      }} />
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <FormControl>
+        <RadioGroup
+          row
+          value={source}
+          onChange={handleSourceChange}
+          sx={{ justifyContent: 'center', gap: 2 }}
+        >
+          <FormControlLabel value="upload" control={<Radio />} label="Upload File" />
+          <FormControlLabel value="url" control={<Radio />} label="Image URL" />
+        </RadioGroup>
+      </FormControl>
+
+      {source === 'upload' && (
+        <Input type="file" label="Upload Image" accept="image/*" onChange={handleFileUpload} />
+      )}
+
+      {source === 'url' && (
+        <Input label="Image URL" value={urlValue} onChange={handleUrlChange} fullWidth />
+      )}
+
+      <Box
+        component="img"
+        src={isValidPreview ? previewImage : 'https://via.placeholder.com/150?text=No+Image'}
+        alt="Preview"
+        sx={{
+          width: 150,
+          height: 150,
+          objectFit: 'cover',
+          borderRadius: 1,
+          border: '1px solid',
+          borderColor: 'divider'
+        }}
+      />
+
+      {!isValidPreview && (
+        <Typography variant="body2" color="text.medium" textAlign="center">
+          No valid image selected.
+        </Typography>
+      )}
+    </Box>
   );
 };
 

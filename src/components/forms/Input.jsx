@@ -29,18 +29,28 @@ const Input = ({
   error,
   validate,
   size = 'small',
+  sx: _sx,
   ...props
 }) => {
   const sx = {
     label: { color: 'text.medium' },
     fieldset: { borderRadius: 2, borderColor: 'background.cardBorder' },
-    '& .MuiOutlinedInput-root:not(.Mui-focused):hover': { fieldset: { borderColor: 'text.faded' } }
+    '& .MuiOutlinedInput-root:not(.Mui-focused):hover': { fieldset: { borderColor: 'text.faded' } },
+    ..._sx
   };
   let el;
 
   switch (type) {
     case 'file':
-      el = <FileInput value={value} onChange={onChange} label={label} size={size} sx={sx} />;
+      el = (
+        <FileInput
+          value={value}
+          onChange={onChange}
+          label={label}
+          size={size}
+          sx={sx}
+        />
+      );
       break;
     case 'text':
       el = (
@@ -64,7 +74,7 @@ const Input = ({
       el = (
         <TextField
           value={value}
-          type={type}
+          type={type === 'string' ? 'text' : type}
           onChange={(e) => onChange(e.target.value)}
           label={label}
           error={!!error}
