@@ -1,6 +1,7 @@
 import { Outlet, Route, Routes } from 'react-router-dom';
-import TagProvider from './providers/TagProvider';
+import ThemeProvider from './providers/ThemeProvider';
 import CategoryProvider from './providers/CategoryProvider';
+import TagProvider from './providers/TagProvider';
 import CartProvider from './providers/CartProvider';
 import Authorize from './components/auth/Authorize';
 import GuestOnly from './components/auth/GuestOnly';
@@ -30,11 +31,13 @@ export default () => {
   return (
     <Routes>
       <Route element={(
-        <CategoryProvider>
-          <TagProvider>
-            <Outlet />
-          </TagProvider>
-        </CategoryProvider>
+        <ThemeProvider>
+          <CategoryProvider>
+            <TagProvider>
+              <Outlet />
+            </TagProvider>
+          </CategoryProvider>
+        </ThemeProvider>
       )}>
         <Route element={(
           <CartProvider>
