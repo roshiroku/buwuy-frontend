@@ -1,10 +1,11 @@
+import { Box } from "@mui/material";
 import Logo from "./Logo";
 
-const LogoText = ({ size = '48px' }) => {
+const LogoText = ({ color = 'currentcolor', size = 44 }) => {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', height: size, fontWeight: 600, fontSize: size }}>
-      BU <Logo style={{ flexShrink: 0 }} /> UY
-    </div>
+    <Box sx={{ display: 'flex', alignItems: 'center', height: size, fontFamily: 'logoFont', fontWeight: 400, fontSize: size, letterSpacing: -2, color }}>
+      BU <Logo fill={color} style={{ flexShrink: 0, marginBottom: size / 11 }} /> UY
+    </Box>
   );
 };
 
