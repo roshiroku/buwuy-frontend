@@ -1,42 +1,82 @@
 import { useState } from 'react';
+import { TextField } from '@mui/material';
 
-export const FileInput = ({ value: _value, onChange }) => {
+export const FileInput = ({ value: _value, onChange, ...props }) => {
   const [value, setValue] = useState('');
 
-  const handleInput = (e) => {
+  const handleChange = (e) => {
     setValue(e.target.value);
     onChange(e.target.files[0]);
   };
 
-  return <input type='file' value={value} onInput={handleInput} />;
+  return (
+    <TextField
+      type="file"
+      value={value}
+      onChange={handleChange}
+      fullWidth
+      slotProps={{ inputLabel: { shrink: true } }}
+      {...props}
+    />
+  );
 };
 
 const Input = ({
   type,
+  value,
   onChange,
+  label,
   error,
   validate,
+  size = 'small',
   ...props
 }) => {
+  const sx = {
+    label: { color: 'text.medium' },
+    fieldset: { borderRadius: 2, borderColor: 'background.cardBorder' },
+    '& .MuiOutlinedInput-root:not(.Mui-focused):hover': { fieldset: { borderColor: 'text.faded' } }
+  };
   let el;
 
   switch (type) {
     case 'file':
-      el = <FileInput onChange={onChange} {...props} />;
+      el = <FileInput value={value} onChange={onChange} label={label} size={size} sx={sx} />;
       break;
     case 'text':
-      el = <textarea onInput={(e) => onChange(e.target.value)} {...props} />;
+      el = (
+        <TextField
+          value={value}
+          multiline
+          onChange={(e) => onChange(e.target.value)}
+          label={label}
+          error={!!error}
+          helperText={error}
+          size={size}
+          fullWidth
+          sx={sx}
+        />
+      );
       break;
+    case 'password':
+    case 'email':
+    case 'number':
     default:
-      el = <input type={type} onInput={(e) => onChange(e.target.value)} {...props} />;
+      el = (
+        <TextField
+          value={value}
+          type={type}
+          onChange={(e) => onChange(e.target.value)}
+          label={label}
+          error={!!error}
+          helperText={error}
+          size={size}
+          fullWidth
+          sx={sx}
+        />
+      );
   }
 
-  return (
-    <>
-      {el}
-      {error && <span>{error}</span>}
-    </>
-  )
+  return el;
 };
 
 export default Input;
