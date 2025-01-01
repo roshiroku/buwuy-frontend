@@ -15,7 +15,7 @@ const ShipmentPage = () => {
 
   const defaultValues = useMemo(() => ({
     ...shipmentSchema.empty(),
-    ...deflateObject(user, 1)
+    ...deflateObject({ contact: user }, 2)
   }), [user]);
 
   const handleSubmit = async (values) => {
@@ -28,7 +28,7 @@ const ShipmentPage = () => {
 
   const { inputs, onSubmit } = useShipmentForm({ default: defaultValues, handleSubmit });
 
-  if (!isComplete.current && !(isLoadingCart || cart.products.length)) {
+  if (!isComplete.current && !isLoadingCart && cart?.products.length === 0) {
     return <Navigate to="/404" replace />;
   }
 

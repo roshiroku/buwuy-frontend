@@ -10,10 +10,10 @@ export const useCart = () => useContext(CartContext);
 
 const CartProvider = ({ children }) => {
   const [showCart, setShowCart] = useState(false);
-  const [localCart, setLocalCart] = useState(null);
-  const { user } = useAuth();
-
-  const { cart, setCart, saveCart, isLoadingCart } = useModel(user ? undefined : localCart);
+  const [localCart, setLocalCart] = useState({ products: [] });
+  const { user, isLoading: isLoadingUser } = useAuth();
+  
+  const { cart, setCart, saveCart, isLoadingCart } = useModel(isLoadingUser ? null : user ? undefined : localCart);
 
   const subtotal = useMemo(() => cart?.products.reduce((total, item) => {
     return total + item.product.price * item.amount;
@@ -77,8 +77,6 @@ const CartProvider = ({ children }) => {
 
         setLocalCart({ products });
       });
-    } else {
-      setLocalCart({ products: [] });
     }
   }, []);
 
@@ -88,10 +86,10 @@ const CartProvider = ({ children }) => {
     saveCart,
     updateCart,
     clearCart,
-    isLoadingCart,
     subtotal,
     showCart,
     setShowCart,
+    isLoadingCart: isLoadingCart || isLoadingUser,
     openCart: () => setShowCart(true),
     closeCart: () => setShowCart(false),
     toggleCart: () => setShowCart(!showCart)
