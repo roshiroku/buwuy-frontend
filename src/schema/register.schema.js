@@ -1,11 +1,9 @@
 import useSchemaForm from '../hooks/useSchemaForm';
 import Schema from './Schema';
-import { contactFields } from './contact.schema';
 import { loginFields } from './login.schema';
 
 export const registerFields = {
-  'name.first': contactFields['name.first'],
-  'name.last': contactFields['name.last'],
+  name: { type: 'string', min: 2, max: 24, required: true },
   avatar: { type: 'file' },
   ...loginFields,
 };
