@@ -23,7 +23,7 @@ export const FileInput = ({ value: _value, onChange, ...props }) => {
 
 const Input = ({
   type,
-  value,
+  value = '',
   onChange,
   label,
   error,

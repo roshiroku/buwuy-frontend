@@ -1,11 +1,12 @@
 import { useMemo, useRef } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { Box, Typography, Button, CircularProgress, Grid2 as Grid } from '@mui/material';
 import shipmentSchema, { useShipmentForm } from '../../schema/shipment.schema';
 import cartService from '../../services/cart.service';
 import * as checkoutService from '../../services/checkout.service';
 import { useAuth } from '../../providers/AuthProvider';
 import { useCart } from '../../providers/CartProvider';
-import { deflateObject, inflateObject } from '../../utils/object.utils';
+import { deflateObject, inflateObject, pick } from '../../utils/object.utils';
 
 const ShipmentPage = () => {
   const isComplete = useRef(false);
@@ -13,10 +14,19 @@ const ShipmentPage = () => {
   const { cart, isLoadingCart, clearCart } = useCart();
   const navigate = useNavigate();
 
-  const defaultValues = useMemo(() => ({
-    ...shipmentSchema.empty(),
-    ...deflateObject({ contact: user }, 2)
-  }), [user]);
+  const defaultValues = useMemo(() => {
+    const [first = '', ...last] = user?.name.split(' ') || [];
+    return {
+      ...shipmentSchema.empty(),
+      ...pick(deflateObject({
+        contact: {
+          'name.first': first,
+          'name.last': last.pop() || '',
+          ...user
+        }
+      }, 2), ...shipmentSchema.items.map(({ name }) => name))
+    };
+  }, [user]);
 
   const handleSubmit = async (values) => {
     const data = { ...inflateObject(values), cart: cartService.normalize(cart) };
@@ -33,25 +43,65 @@ const ShipmentPage = () => {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate>
-      <div>
-        {inputs['contact.name.first']}
-        {inputs['contact.name.last']}
-        {inputs['contact.email']}
-        {inputs['contact.phone']}
-      </div>
-      <div>
-        {inputs['address.country']}
-        {inputs['address.state']}
-        {inputs['address.city']}
-        {inputs['address.street']}
-        {inputs['address.apt']}
-        {inputs['address.zip']}
-      </div>
-      <button type="submit">
-        Proceed To Payment
-      </button>
-    </form>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, py: 4 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h3" component="h1" sx={{ fontWeight: 600, letterSpacing: -1 }}>
+          Shipment Information
+        </Typography>
+        <Typography variant="h6" component="p" sx={{ color: 'text.medium', maxWidth: 800 }}>
+          Please provide your contact and shipping details.
+        </Typography>
+      </Box>
+      {isLoadingCart ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <form onSubmit={onSubmit} noValidate>
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['contact.name.first']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['contact.name.last']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['contact.email']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['contact.phone']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['address.country']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['address.state']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['address.city']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['address.street']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['address.apt']}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {inputs['address.zip']}
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ borderRadius: 2, mt: 4 }}
+          >
+            Proceed To Payment
+          </Button>
+        </form>
+      )}
+    </Box>
   );
 };
 
