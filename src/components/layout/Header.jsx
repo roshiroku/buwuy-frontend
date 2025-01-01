@@ -51,10 +51,18 @@ const Header = () => {
                 <UserMenu />
               ) : (
                 <>
-                  <LinkButton to="/login" variant="outlined" sx={{ borderColor: 'text.faded', backgroundColor: 'background.default', color: 'text.dark' }}>
+                  <LinkButton to="/login" variant="outlined" sx={{
+                    borderColor: 'background.cardBorder',
+                    backgroundColor: 'background.default',
+                    color: 'text.dark'
+                  }}>
                     Log In
                   </LinkButton>
-                  <LinkButton to="/register" variant="contained" disableElevation sx={{ backgroundColor: 'text.dark', color: 'background.default' }}>
+                  <LinkButton to="/register" variant="contained" disableElevation sx={{
+                    borderColor: 'black',
+                    backgroundColor: 'text.dark',
+                    color: 'background.default'
+                  }}>
                     Sign Up
                   </LinkButton>
                 </>
@@ -78,11 +86,11 @@ const UserMenu = () => {
 
   return (
     <>
-      <IconButton ref={btn} onClick={handleMenuOpen} color="inherit">
+      <IconButton ref={btn} onClick={() => setIsOpen(!isOpen)} color="inherit">
         <Avatar src={user.avatar} alt={user.name.first + ' ' + user.name.last} />
       </IconButton>
       <Menu
-        anchorEl={btn}
+        anchorEl={btn.current}
         open={isOpen}
         onClose={() => setIsOpen(false)}
       >
