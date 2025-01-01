@@ -1,3 +1,4 @@
+import { Box, CircularProgress, Grid2, Typography } from '@mui/material';
 import { useCategories } from '../../providers/CategoryProvider';
 import CategoryCard from '../../components/shop/CategoryCard';
 
@@ -5,20 +6,24 @@ const ShopPage = () => {
   const { categories, isLoadingCategories } = useCategories();
 
   return (
-    <div>
-      <h1>Shop Categories</h1>
-      <ul>
-        {isLoadingCategories ? (
-          <></>
-        ) : (
-          categories.map((category) => (
-            <li key={category._id}>
-              <CategoryCard href={`/shop/${category.slug}`} category={category} />
-            </li>
-          ))
-        )}
-      </ul>
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, py: 4 }}>
+      <Typography variant="h3" component="h1" sx={{ fontWeight: 600, letterSpacing: -1 }}>
+        Shop Categories
+      </Typography>
+      {isLoadingCategories ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Grid2 container spacing={4}>
+          {categories.map((category) => (
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={category._id}>
+              <CategoryCard to={`/shop/${category.slug}`} category={category} />
+            </Grid2>
+          ))}
+        </Grid2>
+      )}
+    </Box>
   );
 };
 
