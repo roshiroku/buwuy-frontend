@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import cartService, { getStorageCart, setStorageCart, useCart as useModel } from '../services/cart.service';
 import productService from '../services/product.service';
 import { useAuth } from './AuthProvider';
@@ -10,16 +10,16 @@ export const useCart = () => useContext(CartContext);
 
 const CartProvider = ({ children }) => {
   const [showCart, setShowCart] = useState(false);
-  const [localCart, setLocalCart] = useState({ products: [] });
+  const [localCart, setLocalCart] = useState(null);
   const { user, isLoading: isLoadingUser } = useAuth();
-  
-  const { cart, setCart, saveCart, isLoadingCart } = useModel(isLoadingUser ? null : user ? undefined : localCart);
+
+  const { cart, setCart, saveCart, isLoadingCart } = useModel(isLoadingUser || !localCart ? null : user ? undefined : localCart);
 
   const subtotal = useMemo(() => cart?.products.reduce((total, item) => {
     return total + item.product.price * item.amount;
   }, 0) || 0, [cart]);
 
-  const updateCart = async (product, amount) => {
+  const updateCart = useCallback(async (product, amount) => {
     const { _id } = product;
     const index = cart.products.findIndex((item) => item.product._id === _id);
     const item = cart.products[index] || {
@@ -48,9 +48,9 @@ const CartProvider = ({ children }) => {
     } else {
       setStorageCart(cart);
     }
-  };
+  }, [cart, saveCart, user]);
 
-  const clearCart = async () => {
+  const clearCart = useCallback(async () => {
     setCart({ products: [] });
 
     if (user) {
@@ -58,7 +58,11 @@ const CartProvider = ({ children }) => {
     } else {
       setStorageCart({ products: [] });
     }
-  };
+  }, [user]);
+
+  const openCart = useCallback(() => setShowCart(true), []);
+  const closeCart = useCallback(() => setShowCart(false), []);
+  const toggleCart = useCallback(() => setShowCart((prev) => !prev), []);
 
   useEffect(() => {
     const cart = getStorageCart();
@@ -77,10 +81,12 @@ const CartProvider = ({ children }) => {
 
         setLocalCart({ products });
       });
+    } else {
+      setLocalCart({ products: [] });
     }
   }, []);
 
-  const ctx = {
+  const ctx = useMemo(() => ({
     cart,
     setCart,
     saveCart,
@@ -90,10 +96,10 @@ const CartProvider = ({ children }) => {
     showCart,
     setShowCart,
     isLoadingCart: isLoadingCart || isLoadingUser,
-    openCart: () => setShowCart(true),
-    closeCart: () => setShowCart(false),
-    toggleCart: () => setShowCart(!showCart)
-  };
+    openCart,
+    closeCart,
+    toggleCart
+  }), [updateCart, subtotal, showCart, isLoadingCart, isLoadingUser]);
 
   return (
     <CartContext.Provider value={ctx}>
