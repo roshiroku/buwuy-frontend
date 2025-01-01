@@ -3,7 +3,8 @@ import Schema from './Schema';
 
 export const loginFields = {
   email: {
-    type: 'email'
+    type: 'email',
+    required: true
   },
   password: {
     type: 'password',
@@ -11,7 +12,8 @@ export const loginFields = {
     pattern: '(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])',
     messages: {
       'string.pattern.base': 'Password must include at least one lowercase character, one uppercase character, one number, and one special character.',
-    }
+    },
+    required: true
   }
 };
 
