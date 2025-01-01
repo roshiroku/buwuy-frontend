@@ -1,30 +1,71 @@
+import { Link } from 'react-router-dom';
+import { Card, CardActionArea, CardContent, CardMedia, Typography, Button, Box } from '@mui/material';
 import { useCart } from '../../providers/CartProvider';
 import { remoteAsset } from '../../utils/url.utils';
 
-const ProductCard = ({ href, product }) => {
+const ProductCard = ({ to, product }) => {
   const { updateCart, openCart } = useCart();
   const [primaryImage = {}] = product.images;
-  const Component = href ? 'a' : 'div';
+
+  const cardContent = (
+    <>
+      <CardMedia
+        component="img"
+        image={remoteAsset(primaryImage.src)}
+        alt={primaryImage.alt || product.name}
+        sx={{
+          display: 'block',
+          objectFit: 'cover',
+          aspectRatio: '3 / 2',
+        }}
+      />
+      <CardContent sx={{ p: 3 }}>
+        <Typography variant="h5" component="h3" gutterBottom fontWeight={600} noWrap>
+          {product.name}
+        </Typography>
+        <Typography variant="body1" color="text.medium">
+          {product.byline}
+        </Typography>
+        <Typography variant="body2" color="text.primary" fontWeight={600}>
+          Price: ${product.price}
+        </Typography>
+      </CardContent>
+    </>
+  );
 
   return (
-    <div>
-      <Component href={href}>
-        <img src={remoteAsset(primaryImage.src)} alt={primaryImage.alt || product.name} style={{
-          display: 'block',
-          maxWidth: '150px',
-          objectFit: 'cover',
-          aspectRatio: 1
-        }} />
-        <h3>{product.name}</h3>
-        <p>{product.byline}</p>
-        <p>Price: {product.price}</p>
-      </Component>
-      <div>
-        <button onClick={() => updateCart(product, 1) && openCart()}>
-          Add
-        </button>
-      </div>
-    </div>
+    <Card elevation={0} sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      textDecoration: 'none',
+      color: 'inherit',
+      borderRadius: 3,
+      borderWidth: 1,
+      borderColor: 'background.cardBorder',
+      borderStyle: 'solid',
+    }}>
+      {to ? (
+        <CardActionArea LinkComponent={Link} to={to} sx={{ flexGrow: 1 }}>
+          {cardContent}
+        </CardActionArea>
+      ) : (
+        cardContent
+      )}
+      <Box sx={{ p: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={() => {
+            updateCart(product, 1);
+            openCart();
+          }}
+        >
+          Add to Cart
+        </Button>
+      </Box>
+    </Card>
   );
 };
 

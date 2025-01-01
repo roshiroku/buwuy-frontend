@@ -1,4 +1,5 @@
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Pagination as MuiPagination, PaginationItem, Select, MenuItem, Box } from '@mui/material';
 
 const Pagination = ({
   count,
@@ -22,26 +23,34 @@ const Pagination = ({
   };
 
   return (
-    <div>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0' }}>
       {limitOptions.length > 1 && (
-        <select value={limit} onChange={(e) => navigate(getUrl({ limit: e.target.value, page: 1 }))}>
+        <Select
+          value={limit}
+          onChange={(e) => navigate(getUrl({ limit: e.target.value, page: 1 }))}
+          size="small"
+        >
           {limitOptions.map((option) => (
-            <option key={option}>{option}</option>
+            <MenuItem value={option} key={option}>
+              {option}
+            </MenuItem>
           ))}
-        </select>
+        </Select>
       )}
       {pageCount > 1 && (
-        <div>
-          {[...Array(pageCount)].map((_, i) => (
-            i + 1 === page ? i + 1 : (
-              <Link to={getUrl({ page: i + 1 })} key={i}>
-                {i + 1}
-              </Link>
-            )
-          ))}
-        </div>
+        <MuiPagination
+          count={pageCount}
+          page={page}
+          renderItem={(item) => (
+            <PaginationItem
+              component={Link}
+              to={getUrl({ page: item.page })}
+              {...item}
+            />
+          )}
+        />
       )}
-    </div>
+    </Box>
   );
 };
 
