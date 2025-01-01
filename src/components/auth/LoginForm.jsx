@@ -1,3 +1,4 @@
+import { Box, Button } from '@mui/material';
 import { useAuth } from '../../providers/AuthProvider';
 import { useLoginForm } from '../../schema/login.schema';
 
@@ -12,11 +13,24 @@ const LoginForm = ({ onSuccess }) => {
   const { inputs, onSubmit } = useLoginForm({ handleSubmit });
 
   return (
-    <form onSubmit={onSubmit} noValidate>
+    <Box
+      component="form"
+      onSubmit={onSubmit}
+      noValidate
+      sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+    >
       {inputs.email}
       {inputs.password}
-      <button type="submit">Login</button>
-    </form>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{ borderRadius: 2 }}
+      >
+        Log In
+      </Button>
+    </Box>
   );
 };
 
