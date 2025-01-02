@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import Markdown from 'react-markdown';
 import { useProduct, useProducts } from '../../services/product.service';
 import { useCart } from '../../providers/CartProvider';
 import ProductImages from '../../components/shop/ProductImages';
+import { toCurrency } from '../../utils/number.utils';
 
 const ProductPage = () => {
   const { updateCart, openCart } = useCart();
@@ -13,40 +15,44 @@ const ProductPage = () => {
   const isLoading = useMemo(() => !product, [product]);
 
   return (
-    <div>
-      <div>
-        {isLoading ? 'loading...' : (
-          <ProductImages images={product.images || []} />
-        )}
-      </div>
-      <div>
-        <h1>{isLoading ? 'loading...' : product.name}</h1>
-        <div>
-          {isLoading ? (
-            'loading...'
-          ) : (
-            <Markdown>
-              {product.description}
-            </Markdown>
-          )}
-        </div>
-        <div>
-          {isLoading ? (
-            'loading...'
-          ) : (
-            <>
-              <div>
-                <b>Price:</b>
-                {product.price}
-              </div>
-              <button disabled={!product.stock} onClick={() => updateCart(product, 1) && openCart()}>
-                {product.stock ? 'Add To Cart' : 'Out Of Stock'}
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, py: 4 }}>
+      {isLoading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+            <Box sx={{ flex: 1 }}>
+              <ProductImages images={product.images || []} />
+            </Box>
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Typography variant="h3" component="h1" sx={{ fontWeight: 600, letterSpacing: -1 }}>
+                {product.name}
+              </Typography>
+              <Typography variant="body1" component="div" color="text.secondary" sx={{ /*maxWidth: 400, '& > p': { m: 0 }*/ }}>
+                <Markdown>{product.description}</Markdown>
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Price: {toCurrency(product.price)}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  disabled={!product.stock}
+                  onClick={() => updateCart(product, 1) && openCart()}
+                  sx={{ borderRadius: 2 }}
+                >
+                  {product.stock ? 'Add To Cart' : 'Out Of Stock'}
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </>
+      )}
+    </Box>
   );
 };
 
