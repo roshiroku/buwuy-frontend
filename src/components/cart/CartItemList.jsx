@@ -19,7 +19,7 @@ const CartItemList = ({ items = [], onChange }) => {
           <ListItemAvatar sx={{ m: 0 }}>
             <Avatar
               variant="square"
-              src={remoteAsset(product.images[0]?.src) || 'https://via.placeholder.com/150?text=No+Image'}
+              src={remoteAsset(product.images[0]?.src) || 'https://placehold.co/150?text=No+Image'}
               alt={product.name}
               sx={{ width: 64, height: 64, objectFit: 'cover' }}
             />

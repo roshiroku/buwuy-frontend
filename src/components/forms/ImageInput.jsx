@@ -67,7 +67,7 @@ const ImageInput = ({ value, onChange }) => {
 
       <Box
         component="img"
-        src={isValidPreview ? previewImage : 'https://via.placeholder.com/150?text=No+Image'}
+        src={isValidPreview ? previewImage : 'https://placehold.co/150?text=No+Image'}
         alt="Preview"
         sx={{
           width: 150,
