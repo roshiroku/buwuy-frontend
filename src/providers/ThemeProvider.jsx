@@ -16,9 +16,9 @@ export default ({ children }) => {
   const theme = createTheme({
     palette: {
       mode: themeMode,
-      primary: { main: '#0042c3', light: '#e7efff', contrastText: '#fff' },
-      secondary: { main: '#8200c3', light: '#f7e7ff' },
-      tertiary: { main: '#c30082', light: '#ffe7f7' },
+      primary: { main: '#c30082', light: '#ffe7f7', contrastText: '#fff' },
+      tertiary: { main: '#8200c3', light: '#f7e7ff', contrastText: '#fff' },
+      secondary: { main: '#0042c3', light: '#e7efff', contrastText: '#fff' },
       text: themeMode === 'light' ? {
         veryDark: '#000',
         dark: '#080b11',
