@@ -40,6 +40,13 @@ const ImageInput = ({ value, onChange }) => {
     }
   }, [file]);
 
+  useEffect(() => {
+    if (value && typeof value === 'string') {
+      setSource('url');
+      setUrlValue(value);
+    }
+  }, [value]);
+
   const previewImage = source === 'upload' ? filePreview : remoteAsset(urlValue);
   const isValidPreview = !!(previewImage && (source === 'url' ? urlValue : file));
 
