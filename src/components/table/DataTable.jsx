@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper } from '@mui/material';
 import Pagination from '../layout/Pagination';
 import { isDate } from '../../utils/string.utils';
@@ -55,6 +55,7 @@ const DataTable = ({
   limitParam = 'limit',
   limitOptions = [5, 10, 20]
 }) => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const sort = searchParams.get(sortParam) || _sort;
   const page = Number(searchParams.get(pageParam)) || _page;
@@ -77,6 +78,12 @@ const DataTable = ({
     }
     return _rows;
   }, [_rows, count, sort, skip, limit, columns]);
+
+  useEffect(() => {
+    if (/*!isLoading && */!rows.length && page > 1) {
+      navigate(getUrl({ page: page - 1 }), { replace: true });
+    }
+  }, [rows]);
 
   return (
     <Box>
