@@ -13,7 +13,7 @@ const RegisterForm = ({ onSuccess }) => {
     onSuccess && onSuccess();
   };
 
-  const { values, handlers, inputs, onSubmit } = useRegisterForm({ handleSubmit });
+  const { values, errors, handlers, inputs, onSubmit } = useRegisterForm({ handleSubmit });
 
   return (
     <Box
@@ -25,13 +25,18 @@ const RegisterForm = ({ onSuccess }) => {
       {inputs.name}
       {inputs.email}
       {inputs.password}
-      <ImageInput value={values.avatar} onChange={handlers.avatar} />
+      <ImageInput
+        value={values.avatar}
+        onChange={handlers.avatar}
+        label="Avatar"
+        error={errors.avatar}
+      />
       <Button
         type="submit"
         variant="contained"
         color="primary"
         fullWidth
-        sx={{ borderRadius: 2 }}
+        sx={{ borderRadius: 2, mt: 2 }}
       >
         Create Free Account
       </Button>

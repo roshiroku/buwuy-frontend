@@ -26,7 +26,7 @@ const LoginForm = ({ onSuccess }) => {
         variant="contained"
         color="primary"
         fullWidth
-        sx={{ borderRadius: 2 }}
+        sx={{ borderRadius: 2, mt: 2 }}
       >
         Log In
       </Button>

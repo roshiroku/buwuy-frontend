@@ -21,87 +21,58 @@ export const FileInput = ({ value: _value, onChange, ...props }) => {
   );
 };
 
-const Input = ({
-  type,
-  value = '',
-  onChange,
-  label,
-  error,
-  validate,
-  min,
-  max,
-  size = 'small',
-  sx: _sx,
-  ...props
-}) => {
+const Input = ({ type, value = '', ...props }) => {
   const sx = {
     label: { color: 'text.medium' },
     fieldset: { borderRadius: 2, borderColor: 'background.cardBorder' },
     '& .MuiOutlinedInput-root:not(.Mui-focused):hover': { fieldset: { borderColor: 'text.faded' } },
-    ..._sx
+    ...props.sx
   };
-  let el;
 
-  const characterCountHelperText = max && ['text', 'string'].includes(type) ? (
+  const characterCountHelperText = props.max && ['text', 'string'].includes(type) ? (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Typography variant="small" color="error.main" sx={{ flexGrow: 1 }}>{error}</Typography>
-      <Typography variant="small" color="text.medium" sx={{ flexShrink: 0 }}>{`${value.length} / ${max}`}</Typography>
+      <Typography variant="small" color="error.main" sx={{ flexGrow: 1 }}>{props.error}</Typography>
+      <Typography variant="small" color="text.medium" sx={{ flexShrink: 0 }}>{`${value.length} / ${props.max}`}</Typography>
     </Box>
   ) : (
-    error
+    props.error
   );
+
+  const commonProps = {
+    value,
+    onChange: (e) => props.onChange(e.target.value),
+    onFocus: props.onFocus,
+    onBlur: props.onBlur,
+    focused: props.focused,
+    label: props.label,
+    error: !!props.error,
+    helperText: props.error,
+    fullWidth: props.fullWidth ?? true,
+    size: props.size || 'small',
+    sx,
+    slotProps: props.slotProps
+  };
 
   switch (type) {
     case 'file':
-      el = (
-        <FileInput
-          value={value}
-          onChange={onChange}
-          label={label}
-          size={size}
-          sx={sx}
-        />
-      );
-      break;
+      return <FileInput {...commonProps} onChange={props.onChange} />;
     case 'text':
-      el = (
+      return (
         <TextField
-          value={value}
+          {...commonProps}
           multiline
-          onChange={(e) => onChange(e.target.value)}
-          label={label}
-          error={!!error}
+          minRows={props.minRows || 3}
           helperText={characterCountHelperText}
-          size={size}
-          fullWidth
-          sx={sx}
           slotProps={{
-            input: { minLength: min, maxLength: max },
-            formHelperText: { component: 'div' }
+            input: { minLength: props.min, maxLength: props.max },
+            formHelperText: { component: 'div' },
+            ...(props.slotProps || {})
           }}
-        />
-      );
-      break;
-    case 'password':
-    case 'email':
-    case 'number':
-    default:
-      el = (
-        <TextField
-          value={value}
-          type={type === 'string' ? 'text' : type}
-          onChange={(e) => onChange(e.target.value)}
-          label={label}
-          error={!!error}
-          helperText={error}
-          size={size}
-          fullWidth
-          sx={sx}
         />
       );
   }
 
-  return el;
+  return <TextField {...commonProps} type={type === 'string' ? 'text' : type} />;
 };
 
 export default Input;

@@ -23,7 +23,7 @@ const AdminCategoryPage = () => {
     navigate('/admin/categories');
   };
 
-  const { values, handlers, inputs, onSubmit } = useCategoryForm({ default: category, handleSubmit });
+  const { values, errors, handlers, inputs, onSubmit } = useCategoryForm({ default: category, handleSubmit });
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, py: 4 }}>
@@ -41,31 +41,31 @@ const AdminCategoryPage = () => {
               {id ? 'Update the category details below.' : 'Fill in the details for the new category.'}
             </Typography>
           </Box>
-          <form onSubmit={onSubmit} noValidate>
-            <Grid container spacing={2}>
-              <Grid size={12}>
-                {inputs.name}
-              </Grid>
-              <Grid size={12}>
-                {inputs.byline}
-              </Grid>
-              <Grid size={12}>
-                {inputs.description}
-              </Grid>
-              <Grid size={12}>
-                <ImageInput value={values.image} onChange={handlers.image} />
-              </Grid>
-            </Grid>
+          <Box
+            component="form"
+            onSubmit={onSubmit}
+            noValidate
+            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+          >
+            {inputs.name}
+            {inputs.byline}
+            {inputs.description}
+            <ImageInput
+              value={values.image}
+              onChange={handlers.image}
+              label="Image"
+              error={errors.image}
+            />
             <Button
               type="submit"
               variant="contained"
               color="primary"
               fullWidth
-              sx={{ borderRadius: 2, mt: 4 }}
+              sx={{ borderRadius: 2, mt: 2 }}
             >
               Save
             </Button>
-          </form>
+          </Box>
         </>
       )}
     </Box>
