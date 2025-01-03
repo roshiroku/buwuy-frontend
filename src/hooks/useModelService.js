@@ -7,6 +7,14 @@ export default function useModelService(service, { name = 'model' }) {
   const [single, plural] = Array.isArray(name) ? name : [name, `${name}s`];
   const [Single, Plural] = [ucFirst(single), ucFirst(plural)];
 
+  function renameProp(name) {
+    return name
+      .replace('models', plural)
+      .replace('Models', Plural)
+      .replace('model', single)
+      .replace('Model', Single);
+  }
+
   return {
     [`use${Single}Singleton`]: (input) => {
       const model = useModel(service, input, true);
@@ -14,7 +22,7 @@ export default function useModelService(service, { name = 'model' }) {
         const ctx = {};
         for (const k in model) {
           if (k.match(/model/i)) {
-            ctx[k.replace('model', single).replace('Model', Single)] = model[k];
+            ctx[renameProp(k)] = model[k];
           } else {
             ctx[k + Single] = model[k];
           }
@@ -28,7 +36,7 @@ export default function useModelService(service, { name = 'model' }) {
         const ctx = {};
         for (const k in model) {
           if (k.match(/model/i)) {
-            ctx[k.replace('model', single).replace('Model', Single)] = model[k];
+            ctx[renameProp(k)] = model[k];
           } else {
             ctx[k + Single] = model[k];
           }
@@ -42,7 +50,7 @@ export default function useModelService(service, { name = 'model' }) {
         const ctx = {};
         for (const k in models) {
           if (k.match(/model/i)) {
-            ctx[k.replace('models', plural).replace('Models', Plural)] = models[k];
+            ctx[renameProp(k)] = models[k];
           } else {
             ctx[k + Plural] = models[k];
           }

@@ -8,6 +8,13 @@ export default function useModels(service, config = {}, setConfig = undefined) {
 
   const _setParams = useMemo(() => setConfig || setParams, [setConfig]);
 
+  const modelById = useMemo(() => models.reduce((modelById, model) => {
+    modelById[model._id] = model;
+    return modelById;
+  }, {}), [models]);
+
+  const getModel = useCallback((id) => modelById[id], [modelById]);
+
   const getModels = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -31,6 +38,9 @@ export default function useModels(service, config = {}, setConfig = undefined) {
   return useMemo(() => ({
     models,
     setModels,
+    getModels,
+    modelById,
+    getModel,
     isLoading,
     setIsLoading,
     count,
