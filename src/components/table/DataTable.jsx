@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper } from '@mui/material';
 import Pagination from '../layout/Pagination';
 import { isDate } from '../../utils/string.utils';
 
@@ -19,7 +20,13 @@ function parse(row, col) {
   return value;
 }
 
-function getSorting(sortBy, sortDesc) {
+function getSorting(sortBy, sortDesc, columns) {
+  const column = columns.find(col => col.name === sortBy);
+
+  if (column?.sort) {
+    return column.sort(sortDesc);
+  }
+
   return (a, b) => {
     a = a[sortBy];
     b = b[sortBy];
@@ -66,44 +73,53 @@ const DataTable = ({
 
   const rows = useMemo(() => {
     if (_rows.length === count) {
-      return _rows.sort(getSorting(sortBy, sortDesc)).slice(skip, skip + limit);
+      return _rows.sort(getSorting(sortBy, sortDesc, columns)).slice(skip, skip + limit);
     }
     return _rows;
-  }, [_rows, count, sort, skip, limit]);
+  }, [_rows, count, sort, skip, limit, columns]);
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            {columns.map((col, i) => (
-              <th key={col.name ?? i}>
-                {col.sortable ? (
-                  <Link to={getUrl({ sort: col.name === sortBy && !sortDesc ? `-${col.name}` : col.name })}>
-                    {col.label}
-                    {col.name === sortBy && (sortDesc ? '↓' : '↑')}
-                  </Link>
-                ) : (
-                  col.label
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr key={row._id ?? i}>
-              {columns.map((col, j) => (
-                <td key={col.name ?? j}>
-                  {parse(row, col)}
-                </td>
+    <Box>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {columns.map((col, i) => (
+                <TableCell key={col.name ?? i} sortDirection={col.name === sortBy ? (sortDesc ? 'desc' : 'asc') : false}>
+                  {col.sortable ? (
+                    <Link
+                      to={getUrl({ sort: col.name === sortBy && !sortDesc ? `-${col.name}` : col.name })}
+                      style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                      <TableSortLabel
+                        active={col.name === sortBy}
+                        direction={sortDesc ? 'desc' : 'asc'}
+                      >
+                        {col.label}
+                      </TableSortLabel>
+                    </Link>
+                  ) : (
+                    col.label
+                  )}
+                </TableCell>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, i) => (
+              <TableRow key={row._id ?? i}>
+                {columns.map((col, j) => (
+                  <TableCell key={col.name ?? j}>
+                    {parse(row, col)}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Pagination count={count} limitOptions={limitOptions} />
-    </div>
+    </Box>
   );
 };
 
