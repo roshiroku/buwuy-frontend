@@ -40,7 +40,7 @@ const Input = ({ type, value = '', ...props }) => {
 
   const commonProps = {
     value,
-    onChange: (e) => props.onChange(e.target.value),
+    onChange: (e) => props.onChange && props.onChange(e.target.value),
     onFocus: props.onFocus,
     onBlur: props.onBlur,
     focused: props.focused,
@@ -50,7 +50,12 @@ const Input = ({ type, value = '', ...props }) => {
     fullWidth: props.fullWidth ?? true,
     size: props.size || 'small',
     sx,
-    slotProps: props.slotProps
+    slotProps: props.slotProps,
+    InputLabelProps: props.InputLabelProps,
+    InputProps: props.InputProps,
+    disabled: props.disabled,
+    id: props.id,
+    inputProps: props.inputProps
   };
 
   switch (type) {
