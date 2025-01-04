@@ -10,11 +10,7 @@ export const userFields = {
   ...loginFields,
   phone: { ...contactFields.phone, required: false },
   avatar: { type: 'file' },
-  ...deflateObject({
-    address: Object.fromEntries(Object.entries(addressFields).map(([name, field]) => {
-      return [name, { ...field, required: false }];
-    }))
-  }, 1),
+  ...deflateObject({ address: addressFields }, 1),
   role: { type: 'enum', options: { user: 'User', moderator: 'Moderator', admin: 'Admin' }, required: true }
 };
 

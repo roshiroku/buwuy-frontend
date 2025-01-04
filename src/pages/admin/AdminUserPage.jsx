@@ -19,8 +19,15 @@ const AdminUserPage = () => {
   };
 
   const userSchema = useMemo(() => {
-    userFields.password.required = !user;
-    return new Schema(userFields);
+    const fields = JSON.parse(JSON.stringify(userFields));
+    fields.password.required = !user;
+    fields.password.label = user ? 'New Password' : 'Password';
+    Object.keys(fields).forEach((name) => {
+      if (name.startsWith('address')) {
+        fields[name].required &&= !!user?.address;
+      }
+    });
+    return new Schema(fields);
   }, [user]);
 
   const defaultValue = useMemo(() => deflateObject(user, 1), [user]);
