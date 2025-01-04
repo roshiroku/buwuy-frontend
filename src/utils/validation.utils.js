@@ -38,6 +38,11 @@ export function fieldValidator(name, { type = 'object', ...field }) {
     validator = validator.allow('');
   }
 
+  if (field.options) {
+    const options = typeof field.options === 'object' ? Object.keys(field.options) : field.options;
+    validator = validator.valid(...options);
+  }
+
   if ('min' in field && 'min' in validator) {
     validator = validator.min(field.min);
   }

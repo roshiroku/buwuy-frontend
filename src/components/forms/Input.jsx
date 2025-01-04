@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { TextField, Box, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
+import { TextField, Box, Typography, Select, MenuItem, FormControl, InputLabel, FormHelperText } from '@mui/material';
 
 export const FileInput = ({ value: _value, onChange, ...props }) => {
   const [value, setValue] = useState('');
@@ -18,6 +18,33 @@ export const FileInput = ({ value: _value, onChange, ...props }) => {
       slotProps={{ inputLabel: { shrink: true } }}
       {...props}
     />
+  );
+};
+
+export const EnumInput = ({ value, onChange, options: _options = [], label, helperText, ...props }) => {
+  const options = useMemo(() => {
+    if (Array.isArray(_options)) {
+      return _options.map((option) => {
+        const [value, label] = Array.isArray(option) ? option : [option, option];
+        return { value, label };
+      });
+    } if (typeof _options === 'object') {
+      return Object.entries(_options).map(([value, label]) => ({ value, label }));
+    }
+  }, [_options]);
+
+  return (
+    <FormControl {...props}>
+      {label && <InputLabel>{label}</InputLabel>}
+      <Select value={value} onChange={onChange} displayEmpty label={label}>
+        {options.map(({ value, label }) => (
+          <MenuItem key={value} value={value}>
+            {label}
+          </MenuItem>
+        ))}
+      </Select>
+      {helperText && <FormHelperText error={props.error}>{helperText}</FormHelperText>}
+    </FormControl>
   );
 };
 
@@ -50,21 +77,27 @@ const Input = ({ type, value = '', ...props }) => {
     fullWidth: props.fullWidth ?? true,
     size: props.size || 'small',
     sx,
+    disabled: props.disabled,
+    id: props.id
+  };
+
+  const textFieldProps = {
     slotProps: props.slotProps,
     InputLabelProps: props.InputLabelProps,
     InputProps: props.InputProps,
-    disabled: props.disabled,
-    id: props.id,
     inputProps: props.inputProps
   };
 
   switch (type) {
     case 'file':
       return <FileInput {...commonProps} onChange={props.onChange} />;
+    case 'enum':
+      return <EnumInput {...commonProps} options={props.options} />;
     case 'text':
       return (
         <TextField
           {...commonProps}
+          {...textFieldProps}
           multiline
           minRows={props.minRows || 3}
           helperText={characterCountHelperText}
@@ -77,7 +110,7 @@ const Input = ({ type, value = '', ...props }) => {
       );
   }
 
-  return <TextField {...commonProps} type={type === 'string' ? 'text' : type} />;
+  return <TextField {...commonProps} {...textFieldProps} type={type === 'string' ? 'text' : type} />;
 };
 
 export default Input;

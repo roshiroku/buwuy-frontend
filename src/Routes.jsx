@@ -23,9 +23,9 @@ import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminCategoryPage from './pages/admin/AdminCategoryPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
 import AdminProductPage from './pages/admin/AdminProductPage';
-import AdminVariantsPage from './pages/admin/AdminVariantsPage';
-import AdminVariantPage from './pages/admin/AdminVariantPage';
 import AdminTagsPage from './pages/admin/AdminTagsPage';
+import AdminUsersPage from './pages/admin/AdminUsersPage';
+import AdminUserPage from './pages/admin/AdminUserPage';
 
 export default () => {
   return (
@@ -68,10 +68,10 @@ export default () => {
             <Route path="product" element={<AdminProductPage />} />
             <Route path="products" element={<AdminProductsPage />} />
             <Route path="products/:id" element={<AdminProductPage />} />
-            <Route path="products/:id/variant" element={<AdminVariantPage />} />
-            <Route path="products/:id/variants" element={<AdminVariantsPage />} />
-            <Route path="products/:id/variants/:index" element={<AdminVariantPage />} />
             <Route path="tags" element={<AdminTagsPage />} />
+            <Route path="user" element={<AdminUserPage />} />
+            <Route path="users" element={<AdminUsersPage />} />
+            <Route path="users/:id" element={<AdminUserPage />} />
           </Route>
           <Route path="login" element={(
             <GuestOnly redirect={({ role }) => role === 'admin' ? '/admin' : '/'}>
