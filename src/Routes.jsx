@@ -8,6 +8,7 @@ import Authorize from './components/auth/Authorize';
 import GuestOnly from './components/auth/GuestOnly';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ShopPage from './pages/shop/ShopPage';
@@ -17,6 +18,7 @@ import CheckoutPage from './pages/checkout/CheckoutPage';
 import ShipmentPage from './pages/checkout/ShipmentPage';
 import PaymentPage from './pages/checkout/PaymentPage';
 import CheckoutSuccessPage from './pages/checkout/CheckoutSuccessPage';
+import ProfilePage from './pages/ProfilePage';
 import OrdersPage from './pages/OrdersPage';
 import OrderPage from './pages/OrderPage';
 import AdminLayout from './components/admin/layout/AdminLayout';
@@ -31,7 +33,6 @@ import AdminProductPage from './pages/admin/AdminProductPage';
 import AdminTagsPage from './pages/admin/AdminTagsPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import AdminUserPage from './pages/admin/AdminUserPage';
-import ProfilePage from './pages/ProfilePage';
 
 export default () => {
   return (
@@ -53,6 +54,7 @@ export default () => {
           </CartProvider>
         )}>
           <Route index element={<HomePage />} />
+          <Route path="about" element={<AboutPage />} />
           <Route element={<GuestOnly><Outlet /></GuestOnly>}>
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
