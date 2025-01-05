@@ -27,4 +27,10 @@ export const register = async (data) => {
   return user;
 };
 
+export const updateProfile = async (data) => {
+  const { data: user } = await axios.put('/api/auth/profile', toFormData(data));
+  setToken(user.token);
+  return user;
+};
+
 export const logout = removeToken;

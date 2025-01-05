@@ -29,7 +29,13 @@ const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const ctx = { user, isLoading, login, register, logout };
+  const updateProfile = async (data) => {
+    const user = await authService.updateProfile(data);
+    setUser(user);
+    return user;
+  };
+
+  const ctx = { user, isLoading, login, register, logout, updateProfile };
 
   useEffect(() => {
     // Check for token in localStorage
