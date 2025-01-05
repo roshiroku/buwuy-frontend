@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { Box, Typography, Button, CircularProgress, Grid } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, Grid2 as Grid } from '@mui/material';
 import { usePaymentForm } from '../../schema/payment.schema';
 import * as checkoutService from '../../services/checkout.service';
 import { toCurrency } from '../../utils/number.utils';
@@ -60,21 +60,25 @@ const PaymentPage = () => {
               {toCurrency(order.subtotal)}
             </Typography>
           </Box>
-          <form onSubmit={onSubmit} noValidate>
+          <Box component="form" onSubmit={onSubmit} noValidate sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4
+          }}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 {inputs.cc}
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 {inputs.expiration}
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 {inputs.cvv}
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 {inputs.name}
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 {inputs.identification}
               </Grid>
             </Grid>
@@ -83,11 +87,11 @@ const PaymentPage = () => {
               variant="contained"
               color="primary"
               fullWidth
-              sx={{ borderRadius: 2, mt: 4 }}
+              sx={{ borderRadius: 2 }}
             >
               Confirm Payment
             </Button>
-          </form>
+          </Box>
         </>
       )}
     </Box>

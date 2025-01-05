@@ -23,8 +23,9 @@ const ShipmentPage = () => {
           'name.first': first,
           'name.last': last.pop() || '',
           ...user
-        }
-      }, 2), ...shipmentSchema.items.map(({ name }) => name))
+        },
+        address: user?.address
+      }, 1), ...shipmentSchema.items.map(({ name }) => name))
     };
   }, [user]);
 
@@ -57,7 +58,11 @@ const ShipmentPage = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <form onSubmit={onSubmit} noValidate>
+        <Box component="form" onSubmit={onSubmit} noValidate sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 4
+        }}>
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6 }}>
               {inputs['contact.name.first']}
@@ -95,11 +100,11 @@ const ShipmentPage = () => {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ borderRadius: 2, mt: 4 }}
+            sx={{ borderRadius: 2 }}
           >
             Proceed To Payment
           </Button>
-        </form>
+        </Box>
       )}
     </Box>
   );
