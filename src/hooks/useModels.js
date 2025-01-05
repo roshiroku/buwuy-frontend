@@ -29,10 +29,12 @@ export default function useModels(service, config = {}, setConfig = undefined) {
 
   useEffect(() => {
     setParams(config);
-  }, Object.values(config));
+  }, [JSON.stringify(config)]);
 
   useEffect(() => {
-    getModels();
+    if (params) {
+      getModels();
+    }
   }, [params]);
 
   return useMemo(() => ({
@@ -47,9 +49,9 @@ export default function useModels(service, config = {}, setConfig = undefined) {
     setCount,
     params: params,
     setParams: _setParams,
-    skip: params.skip,
+    skip: params?.skip,
     setSkip: (skip) => _setParams({ ...params, skip }),
-    limit: params.limit,
+    limit: params?.limit,
     setLimit: (limit) => _setParams({ ...params, limit }),
   }), [models, count, isLoading, params, _setParams]);
 }

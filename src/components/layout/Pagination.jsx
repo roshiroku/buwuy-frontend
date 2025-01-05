@@ -22,7 +22,7 @@ const Pagination = ({
     return url.pathname + url.search;
   };
 
-  return (
+  return count > limitOptions[0] && (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0' }}>
       {limitOptions.length > 1 && (
         <Select
