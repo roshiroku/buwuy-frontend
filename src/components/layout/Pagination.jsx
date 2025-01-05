@@ -1,5 +1,6 @@
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Pagination as MuiPagination, PaginationItem, Select, MenuItem, Box } from '@mui/material';
+import Input from '../forms/Input';
 
 const Pagination = ({
   count,
@@ -25,17 +26,12 @@ const Pagination = ({
   return count > limitOptions[0] && (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0' }}>
       {limitOptions.length > 1 && (
-        <Select
+        <Input
+          type="enum"
           value={limit}
-          onChange={(e) => navigate(getUrl({ limit: e.target.value, page: 1 }))}
-          size="small"
-        >
-          {limitOptions.map((option) => (
-            <MenuItem value={option} key={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
+          options={limitOptions}
+          onChange={(limit) => navigate(getUrl({ limit, page: 1 }))}
+        />
       )}
       {pageCount > 1 && (
         <MuiPagination

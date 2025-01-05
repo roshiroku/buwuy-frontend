@@ -74,7 +74,7 @@ const Input = ({ type, value = '', ...props }) => {
     label: props.label,
     error: !!props.error,
     helperText: props.error,
-    fullWidth: props.fullWidth ?? true,
+    fullWidth: !!props.fullWidth,
     size: props.size || 'small',
     sx,
     disabled: props.disabled,

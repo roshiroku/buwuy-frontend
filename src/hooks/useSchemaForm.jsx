@@ -33,6 +33,7 @@ export default function useSchemaForm(schema, { default: _default, handleChange,
           placeholder={field.label}
           onChange={onChange(name)}
           error={errors[name]}
+          fullWidth
           {...field}
         />
       );
