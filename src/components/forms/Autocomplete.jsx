@@ -8,17 +8,25 @@ const Autocomplete = ({
   onChange,
   label,
   error,
+  placeholder,
   multiple = false,
-  slotProps = { chip: { size: 'small', color: 'primary' } },
+  slotProps: _slotProps = { chip: { size: 'small', color: 'primary' } },
   ...props
 }) => {
+  const slotProps = useMemo(() => ({
+    ..._slotProps,
+    chip: { size: 'small', color: 'primary', ..._slotProps.chip }
+  }), [_slotProps]);
+
   const options = useMemo(() => _options, [JSON.stringify(_options)]);
 
   const value = useMemo(() => {
     if (multiple) {
-      return _value.map((value) => options.find((opt) => opt.value === value));
+      return options.length >= _value.length ? (
+        _value.map((value) => options.find((opt) => opt.value === value))
+      ) : [];
     } else {
-      return options.find(({ value }) => value === _value) || '';
+      return options.find(({ value }) => value === _value);
     }
   }, [_value, options, multiple]);
 
@@ -27,7 +35,7 @@ const Autocomplete = ({
       value={value}
       onChange={(e, value) => onChange(multiple ? value.map(({ value }) => value) : value?.value)}
       options={options}
-      renderInput={(params) => <Input {...params} label={label} error={error} />}
+      renderInput={(params) => <Input {...params} label={label} error={error} placeholder={placeholder} />}
       multiple={multiple}
       slotProps={slotProps}
       {...props}

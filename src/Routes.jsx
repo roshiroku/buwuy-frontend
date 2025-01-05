@@ -12,6 +12,7 @@ import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ShopPage from './pages/shop/ShopPage';
+import SearchPage from './pages/shop/SearchPage';
 import CategoryPage from './pages/shop/CategoryPage';
 import ProductPage from './pages/shop/ProductPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
@@ -60,6 +61,7 @@ export default () => {
             <Route path="register" element={<RegisterPage />} />
           </Route>
           <Route path="shop" element={<ShopPage />} />
+          <Route path="shop/search" element={<SearchPage />} />
           <Route path="shop/:categorySlug" element={<CategoryPage />} />
           <Route path="shop/:categorySlug/:productSlug" element={<ProductPage />} />
           <Route path="checkout" element={<CheckoutPage />} />

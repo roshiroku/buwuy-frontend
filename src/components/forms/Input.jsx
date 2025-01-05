@@ -78,6 +78,7 @@ const Input = ({ type, value = '', ...props }) => {
     size: props.size || 'small',
     sx,
     disabled: props.disabled,
+    placeholder: props.placeholder,
     id: props.id
   };
 
