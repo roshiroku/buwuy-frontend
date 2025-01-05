@@ -3,6 +3,7 @@ import ThemeProvider from './providers/ThemeProvider';
 import CategoryProvider from './providers/CategoryProvider';
 import TagProvider from './providers/TagProvider';
 import CartProvider from './providers/CartProvider';
+import Authenticate from './components/auth/Authenticate';
 import Authorize from './components/auth/Authorize';
 import GuestOnly from './components/auth/GuestOnly';
 import Layout from './components/layout/Layout';
@@ -16,6 +17,8 @@ import CheckoutPage from './pages/checkout/CheckoutPage';
 import ShipmentPage from './pages/checkout/ShipmentPage';
 import PaymentPage from './pages/checkout/PaymentPage';
 import CheckoutSuccessPage from './pages/checkout/CheckoutSuccessPage';
+import OrdersPage from './pages/OrdersPage';
+import OrderPage from './pages/OrderPage';
 import AdminLayout from './components/admin/layout/AdminLayout';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminPage from './pages/admin/AdminPage';
@@ -28,6 +31,7 @@ import AdminProductPage from './pages/admin/AdminProductPage';
 import AdminTagsPage from './pages/admin/AdminTagsPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import AdminUserPage from './pages/admin/AdminUserPage';
+import ProfilePage from './pages/ProfilePage';
 
 export default () => {
   return (
@@ -60,6 +64,11 @@ export default () => {
           <Route path="checkout/shipment" element={<ShipmentPage />} />
           <Route path="checkout/payment/:id" element={<PaymentPage />} />
           <Route path="checkout/success/:id" element={<CheckoutSuccessPage />} />
+          <Route element={<Authenticate><Outlet /></Authenticate>}>
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="orders" element={<OrdersPage />} />
+          </Route>
+          <Route path="orders/:id" element={<OrderPage />} />
         </Route>
         <Route path="admin" element={<AdminLayout><Outlet /></AdminLayout>}>
           <Route element={<Authorize redirect="/admin/login"><Outlet /></Authorize>}>
