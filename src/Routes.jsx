@@ -21,6 +21,8 @@ import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminPage from './pages/admin/AdminPage';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminCategoryPage from './pages/admin/AdminCategoryPage';
+import AdminOrdersPage from './pages/admin/AdminOrdersPage';
+import AdminOrderPage from './pages/admin/AdminOrderPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
 import AdminProductPage from './pages/admin/AdminProductPage';
 import AdminTagsPage from './pages/admin/AdminTagsPage';
@@ -65,6 +67,9 @@ export default () => {
             <Route path="category" element={<AdminCategoryPage />} />
             <Route path="categories" element={<AdminCategoriesPage />} />
             <Route path="categories/:id" element={<AdminCategoryPage />} />
+            <Route path="order" element={<AdminOrderPage />} />
+            <Route path="orders" element={<AdminOrdersPage />} />
+            <Route path="orders/:id" element={<AdminOrderPage />} />
             <Route path="product" element={<AdminProductPage />} />
             <Route path="products" element={<AdminProductsPage />} />
             <Route path="products/:id" element={<AdminProductPage />} />
