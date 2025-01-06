@@ -1,22 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../providers/AuthProvider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Avatar, Box, Divider } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useAuth } from '../../../providers/AuthProvider';
+import { useTheme } from '../../../providers/ThemeProvider';
 import Logo from '../../layout/Logo';
+import NavLink from '../../layout/NavLink';
+import { remoteAsset } from '../../../utils/url.utils';
 
 const AdminHeader = () => {
   const { user, isLoading, logout } = useAuth();
+  const { themeMode, toggleThemeMode } = useTheme();
   const navigate = useNavigate();
   const userButtonRef = useRef(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -26,44 +23,52 @@ const AdminHeader = () => {
     navigate('/');
   };
 
+  const height = 72;
+
   return (
-    <Box sx={{ height: 72 }}>
-      <AppBar position="fixed" sx={{
-        height: 'inherit',
-        boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px',
-        backgroundColor: 'background.default',
-        color: 'text.dark'
-      }}>
+    <Box sx={{ height }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          height,
+          boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px',
+          backgroundColor: 'background.default',
+          color: 'text.header',
+        }}
+      >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
           <Box component="nav" sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <Link to="/admin" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'currentcolor' }}>
+            <Link
+              to="/admin"
+              style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'currentcolor' }}
+            >
               <Logo style={{ width: 42 }} />
-              <Typography variant="h6" noWrap sx={{ flexShrink: 0, fontWeight: 600 }}>
+              <Typography variant="h6" noWrap sx={{ fontWeight: 600 }}>
                 Admin Panel
               </Typography>
             </Link>
-            <Link to="/admin/users" style={{ textDecoration: 'none', color: 'currentcolor' }}>
-              <Typography variant="body1">Users</Typography>
-            </Link>
-            <Link to="/admin/categories" style={{ textDecoration: 'none', color: 'currentcolor' }}>
-              <Typography variant="body1">Categories</Typography>
-            </Link>
-            <Link to="/admin/tags" style={{ textDecoration: 'none', color: 'currentcolor' }}>
-              <Typography variant="body1">Tags</Typography>
-            </Link>
-            <Link to="/admin/products" style={{ textDecoration: 'none', color: 'currentcolor' }}>
-              <Typography variant="body1">Products</Typography>
-            </Link>
-            <Link to="/admin/orders" style={{ textDecoration: 'none', color: 'currentcolor' }}>
-              <Typography variant="body1">Orders</Typography>
-            </Link>
+            {user?.role === 'admin' && (
+              <NavLink to="/admin/users">
+                <Typography variant="body1" fontWeight={500}>Users</Typography>
+              </NavLink>
+            )}
+            {[
+              { to: '/admin/categories', label: 'Categories' },
+              { to: '/admin/tags', label: 'Tags' },
+              { to: '/admin/products', label: 'Products' },
+              { to: '/admin/orders', label: 'Orders' },
+            ].map((link) => (
+              <NavLink key={link.to} to={link.to}>
+                <Typography variant="body1" fontWeight={500}>{link.label}</Typography>
+              </NavLink>
+            ))}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton LinkComponent={Link} color="inherit" to="/">
               <HomeIcon />
             </IconButton>
-            <IconButton color="inherit">
-              <DarkModeIcon />
+            <IconButton color="inherit" onClick={toggleThemeMode}>
+              {themeMode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
             {isLoading ? (
               <Typography variant="body2">Loading...</Typography>
@@ -71,7 +76,7 @@ const AdminHeader = () => {
               user && (
                 <>
                   <IconButton ref={userButtonRef} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} color="inherit">
-                    <Avatar src={user.avatar} alt={user.name} />
+                    <Avatar src={remoteAsset(user.avatar)} alt={user.name} />
                   </IconButton>
                   <Menu
                     anchorEl={userButtonRef.current}
