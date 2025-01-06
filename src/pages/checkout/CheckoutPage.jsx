@@ -21,7 +21,7 @@ const CheckoutPage = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <CircularProgress />
         </Box>
-      ) : cart.products.length === 0 ? (
+      ) : cart.items.length === 0 ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, p: 2 }}>
           <Typography variant="h6" color="text.medium">
             Your cart is empty.
@@ -39,7 +39,7 @@ const CheckoutPage = () => {
         </Box>
       ) : (
         <>
-          <CartItemList items={cart.products} />
+          <CartItemList items={cart.items} />
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
               Subtotal:

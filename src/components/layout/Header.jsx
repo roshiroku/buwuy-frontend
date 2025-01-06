@@ -95,7 +95,7 @@ const Header = () => {
               {themeMode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
             </IconButton>
             <IconButton ref={cartButtonRef} color="inherit" onClick={toggleCart} aria-label="Toggle Cart">
-              <Badge badgeContent={cart?.products.length || 0} color="primary">
+              <Badge badgeContent={cart?.items.length || 0} color="primary">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
@@ -111,8 +111,8 @@ const Header = () => {
                     variant="outlined"
                     sx={{
                       borderRadius: 2,
-                      borderColor: 'background.cardBorder',
-                      color: 'currentcolor'
+                      borderColor: 'currentcolor',
+                      color: 'text.primary'
                     }}
                     color="link"
                   >

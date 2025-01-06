@@ -6,7 +6,7 @@ import useModelService from '../hooks/useModelService';
 const CART_KEY = 'cart';
 
 export function getStorageCart() {
-  const cart = { products: [] };
+  const cart = { items: [] };
   try {
     return JSON.parse(sessionStorage.getItem(CART_KEY)) || cart;
   } catch (e) {
@@ -45,10 +45,10 @@ class CartService extends ModelService {
     return data;
   }
 
-  normalize({ products, ...data }) {
+  normalize({ items, ...data }) {
     return {
       ...data,
-      products: products.map(({ product, amount }) => ({
+      items: items.map(({ product, amount }) => ({
         product: typeof product === 'object' ? product._id : product,
         amount
       }))

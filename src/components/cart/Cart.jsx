@@ -8,7 +8,7 @@ import { toCurrency } from '../../utils/number.utils';
 const Cart = () => {
   const { cart, subtotal, clearCart } = useCart();
 
-  if (cart.products.length === 0) {
+  if (cart.items.length === 0) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, p: 2 }}>
         <Typography variant="h6" color="text.medium">
@@ -33,7 +33,7 @@ const Cart = () => {
         Your Cart
       </Typography>
       <Divider />
-      <CartItemList items={cart.products} />
+      <CartItemList items={cart.items} />
       <Divider />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="body1" sx={{ fontWeight: 'bold' }}>

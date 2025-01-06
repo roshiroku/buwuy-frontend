@@ -15,14 +15,14 @@ const CartProvider = ({ children }) => {
 
   const { cart, setCart, saveCart, isLoadingCart } = useModel(isLoadingUser || !localCart ? null : user ? undefined : localCart);
 
-  const subtotal = useMemo(() => cart?.products.reduce((total, item) => {
+  const subtotal = useMemo(() => cart?.items.reduce((total, item) => {
     return total + item.product.price * item.amount;
   }, 0) || 0, [cart]);
 
   const updateCart = useCallback(async (product, amount) => {
     const { _id } = product;
-    const index = cart.products.findIndex((item) => item.product._id === _id);
-    const item = cart.products[index] || {
+    const index = cart.items.findIndex((item) => item.product._id === _id);
+    const item = cart.items[index] || {
       product: pick(product, '_id', 'name', 'images', 'price', 'stock'),
       amount: 0
     };
@@ -32,12 +32,12 @@ const CartProvider = ({ children }) => {
     }
 
     if (index === -1 && item.amount > 0) {
-      cart.products.push(item);
+      cart.items.push(item);
     } else if (index > -1 && item.amount < 1) {
-      cart.products.splice(index, 1);
+      cart.items.splice(index, 1);
     }
 
-    if (!cart.products.length) {
+    if (!cart.items.length) {
       setShowCart(false);
     }
 
@@ -51,12 +51,12 @@ const CartProvider = ({ children }) => {
   }, [cart, saveCart, user]);
 
   const clearCart = useCallback(async () => {
-    setCart({ products: [] });
+    setCart({ items: [] });
 
     if (user) {
       await cartService.delete();
     } else {
-      setStorageCart({ products: [] });
+      setStorageCart({ items: [] });
     }
   }, [user]);
 
@@ -66,23 +66,23 @@ const CartProvider = ({ children }) => {
 
   useEffect(() => {
     const cart = getStorageCart();
-    if (cart.products?.length) {
+    if (cart.items?.length) {
       productService.find({
-        _id: cart.products.map((item) => item.product),
-        limit: cart.products.length
+        _id: cart.items.map((item) => item.product),
+        limit: cart.items.length
       }).then(({ results }) => {
-        const products = [];
-        for (const { product: _id, amount } of cart.products) {
+        const items = [];
+        for (const { product: _id, amount } of cart.items) {
           const product = results.find((product) => product._id === _id);
           if (product) {
-            products.push({ product, amount });
+            items.push({ product, amount });
           }
         }
 
-        setLocalCart({ products });
+        setLocalCart({ items });
       });
     } else {
-      setLocalCart({ products: [] });
+      setLocalCart({ items: [] });
     }
   }, []);
 

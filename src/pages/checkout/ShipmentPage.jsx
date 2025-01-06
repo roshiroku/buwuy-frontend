@@ -39,7 +39,7 @@ const ShipmentPage = () => {
 
   const { inputs, onSubmit } = useShipmentForm({ default: defaultValues, handleSubmit });
 
-  if (!isComplete.current && !isLoadingCart && cart?.products.length === 0) {
+  if (!isComplete.current && !isLoadingCart && cart?.items.length === 0) {
     return <Navigate to="/404" replace />;
   }
 
