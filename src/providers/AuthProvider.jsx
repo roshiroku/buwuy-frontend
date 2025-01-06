@@ -8,20 +8,25 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stores user data
+  const [settings, setSettings] = useState(authService.getStorageSettings());
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
-  const login = async (email, password) => {
-    const user = await authService.login(email, password);
+  const onLogin = (user) => {
     setUser(user);
+    setSettings(user.settings);
+    authService.setStorageSettings(user.settings);
     removeStorageCart();
     return user;
   };
 
+  const login = async (email, password) => {
+    const user = await authService.login(email, password);
+    return onLogin(user);
+  };
+
   const register = async (data) => {
     const user = await authService.register(data);
-    setUser(user);
-    removeStorageCart();
-    return user;
+    return onLogin(user);
   };
 
   const logout = () => {
@@ -35,7 +40,15 @@ const AuthProvider = ({ children }) => {
     return user;
   };
 
-  const ctx = { user, isLoading, login, register, logout, updateProfile };
+  const updateSettings = async (data) => {
+    setSettings(data);
+    authService.setStorageSettings(data);
+
+    if (user) {
+      const user = await authService.updateSettings(data);
+      setUser(user);
+    }
+  };
 
   useEffect(() => {
     // Check for token in localStorage
@@ -44,7 +57,7 @@ const AuthProvider = ({ children }) => {
       // Optionally, verify token with backend or decode it to get user info
       authService
         .auth()
-        .then(setUser)
+        .then(onLogin)
         .catch((error) => {
           console.error('Invalid token', error);
           logout();
@@ -54,6 +67,17 @@ const AuthProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, []);
+
+  const ctx = {
+    user,
+    isLoading,
+    settings,
+    setSettings: updateSettings,
+    login,
+    register,
+    logout,
+    updateProfile
+  };
 
   return (
     <AuthContext.Provider value={ctx}>
