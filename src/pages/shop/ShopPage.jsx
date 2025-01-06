@@ -1,6 +1,7 @@
 import { Box, CircularProgress, Grid2, Typography } from '@mui/material';
 import { useCategories } from '../../providers/CategoryProvider';
 import CategoryCard from '../../components/shop/CategoryCard';
+import bestSellers from '../../assets/best-sellers.webp';
 
 const ShopPage = () => {
   const { categories, isLoadingCategories } = useCategories();
@@ -21,6 +22,16 @@ const ShopPage = () => {
               <CategoryCard to={`/shop/${category.slug}`} category={category} />
             </Grid2>
           ))}
+          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+            <CategoryCard
+              to="/shop/best-sellers"
+              category={{
+                name: 'Best Sellers',
+                byline: 'Explore our top-selling products that customers love!',
+                image: bestSellers
+              }}
+            />
+          </Grid2>
         </Grid2>
       )}
     </Box>

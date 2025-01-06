@@ -1,3 +1,7 @@
 export function remoteAsset(url) {
-  return url?.startsWith('/') ? `${import.meta.env.VITE_ROOT_URI}${url}` : url;
+  if (url?.startsWith('/') && !url?.startsWith('/src/assets/')) {
+    return `${import.meta.env.VITE_ROOT_URI}${url}`;
+  }
+
+  return url;
 }
