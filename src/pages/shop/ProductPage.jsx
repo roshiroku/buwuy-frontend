@@ -30,7 +30,7 @@ const ProductPage = () => {
               <Typography variant="h3" component="h1" sx={{ fontWeight: 600, letterSpacing: -1 }}>
                 {product.name}
               </Typography>
-              <Typography variant="body1" component="div" color="text.secondary" sx={{ /*maxWidth: 400, '& > p': { m: 0 }*/ }}>
+              <Typography variant="body1" component="div" color="text.medium" sx={{ /*maxWidth: 400, '& > p': { m: 0 }*/ }}>
                 <Markdown>{product.description}</Markdown>
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

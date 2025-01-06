@@ -23,7 +23,7 @@ const CheckoutPage = () => {
         </Box>
       ) : cart.products.length === 0 ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, p: 2 }}>
-          <Typography variant="h6" color="text.secondary">
+          <Typography variant="h6" color="text.medium">
             Your cart is empty.
           </Typography>
           <Button

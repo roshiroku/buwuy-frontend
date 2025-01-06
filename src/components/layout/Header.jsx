@@ -14,24 +14,7 @@ import Cart from '../cart/Cart';
 import SearchForm from '../shop/SearchForm';
 import UserMenu from './UserMenu';
 import BackdropMenu from './BackdropMenu';
-
-const NavLink = ({ to, small = 'small', children }) => {
-  return (
-    <LinkButton
-      to={to}
-      size={small}
-      sx={{
-        px: 1,
-        borderRadius: 2,
-        textTransform: 'none',
-        color: 'currentcolor'
-      }}
-      color="link"
-    >
-      {children}
-    </LinkButton>
-  );
-};
+import NavLink from './NavLink';
 
 const Header = () => {
   const [isSearching, setIsSearching] = useState(false);
@@ -75,10 +58,8 @@ const Header = () => {
         sx={({ palette }) => ({
           height,
           boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px',
-          backgroundColor: 'background.default',
-          color: 'text.header',
-          borderBottom: palette.mode === 'dark' ? '1px solid' : '',
-          borderColor: 'text.medium'
+          backgroundColor: palette.mode === 'dark' ? 'background.paper' : 'background.default',
+          color: 'text.header'
         })}
       >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
@@ -162,7 +143,7 @@ const Header = () => {
         onClose={() => setIsSearching(false)}
         elevation={0}
         TransitionComponent={Fade}
-        sx={{
+        sx={({ palette }) => ({
           p: 0,
           maxWidth: '100%',
           width: '100%',
@@ -171,8 +152,8 @@ const Header = () => {
           boxShadow: '0px 16px 32px rgba(0, 0, 0, 0.1), 0px 8px 16px rgba(0, 0, 0, 0.08)',
           borderRadius: 0,
           zIndex: 1000,
-          paper: { backgroundColor: 'background.default' }
-        }}
+          paper: { backgroundColor: palette.mode === 'dark' ? 'background.paper' : 'background.default' }
+        })}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 2, p: 3 }}>
           <Typography variant="h5" sx={{ fontWeight: 500, letterSpacing: -0.5 }}>

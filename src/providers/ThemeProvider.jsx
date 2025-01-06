@@ -37,16 +37,16 @@ export default ({ children }) => {
         header: '#fafcfe',
         primary: '#f3f5f7',
         subtitle: '#222',
-        medium: '#6f7780',
-        faded: '#adb4be',
-        hoverFaded: '#939aa3'
+        medium: '#adb4be',
+        faded: '#939aa3',
+        hoverFaded: '#6f7780'
       },
       background: {
         default: themeMode === 'light' ? '#fff' : '#000',
         paper: themeMode === 'light' ? '#f3f5f7' : '#06080a',
         contrast: themeMode === 'light' ? '#080b11' : '#fafcfe',
         lightCard: '#f3f5f7',
-        cardBorder: '#e2e6ed',
+        cardBorder: themeMode === 'light' ? '#e2e6ed' : '#14181f',
         linkHover: '#f0f2f5'
       }
     },
@@ -57,7 +57,7 @@ export default ({ children }) => {
   });
 
   return (
-    <ThemeContext.Provider value={{ themeMode, toggleThemeMode }}>
+    <ThemeContext.Provider value={{ theme, themeMode, toggleThemeMode }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}

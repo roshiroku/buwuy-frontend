@@ -16,7 +16,7 @@ const CheckoutSuccessPage = () => {
         <CircularProgress />
       ) : (
         <>
-          <Typography variant="h3" component="h1" sx={{ fontWeight: 600 }}>
+          <Typography variant="h3" component="h1" sx={{ fontWeight: 600, letterSpacing: -1 }}>
             Thank You for Your Purchase!
           </Typography>
           <Typography variant="h6" component="p" sx={{ color: 'text.medium' }}>

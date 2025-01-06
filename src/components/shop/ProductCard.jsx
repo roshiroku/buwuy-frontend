@@ -46,7 +46,11 @@ const ProductCard = ({ to, product }) => {
       borderStyle: 'solid',
     }}>
       {to ? (
-        <CardActionArea LinkComponent={Link} to={to} sx={{ flexGrow: 1 }}>
+        <CardActionArea LinkComponent={Link} to={to} sx={{
+          flexGrow: 1,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0
+        }}>
           {cardContent}
         </CardActionArea>
       ) : (
@@ -56,6 +60,7 @@ const ProductCard = ({ to, product }) => {
         <Button
           variant="contained"
           color="primary"
+          sx={{ borderRadius: 2 }}
           fullWidth
           onClick={() => {
             updateCart(product, 1);

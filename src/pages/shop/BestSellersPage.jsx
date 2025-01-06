@@ -15,7 +15,7 @@ const BestSellersPage = () => {
         <Typography variant="h3" component="h1" sx={{ fontWeight: 600, letterSpacing: -1 }}>
           Best Sellers
         </Typography>
-        <Typography variant="h6" component="p" sx={{ color: 'text.secondary', maxWidth: 800 }}>
+        <Typography variant="h6" component="p" sx={{ color: 'text.medium', maxWidth: 800 }}>
           Discover the top-selling products in our collection.
         </Typography>
       </Box>
@@ -54,7 +54,7 @@ const BestSellersPage = () => {
               ))}
             </Grid>
           ) : (
-            <Typography variant="h6" color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+            <Typography variant="h6" color="text.medium" sx={{ textAlign: 'center', mt: 4 }}>
               No products found.
             </Typography>
           )}

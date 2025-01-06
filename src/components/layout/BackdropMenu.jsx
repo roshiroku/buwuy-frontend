@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu } from '@mui/material';
+import { useTheme } from '../../providers/ThemeProvider';
 
 const BackdropMenu = ({
   anchorEl,
@@ -13,6 +14,8 @@ const BackdropMenu = ({
   TransitionComponent,
   children
 }) => {
+  const { theme } = useTheme();
+  const [styles, setStyles] = useState(typeof _sx === 'function' ? _sx(theme) : _sx);
   const {
     paper,
     root,
@@ -26,8 +29,12 @@ const BackdropMenu = ({
     zIndex,
     boxShadow,
     ...style
-  } = _sx;
+  } = styles;
   const [sx, setSx] = useState(style);
+
+  useEffect(() => {
+    setStyles(typeof _sx === 'function' ? _sx(theme) : _sx);
+  }, [theme])
 
   return (
     <Menu

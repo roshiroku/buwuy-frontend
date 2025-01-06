@@ -34,7 +34,7 @@ const SearchPage = () => {
         <Typography variant="h3" component="h1" sx={{ fontWeight: 600, letterSpacing: -1 }}>
           Search Results
         </Typography>
-        <Typography variant="h6" component="p" sx={{ color: 'text.secondary', maxWidth: 800 }}>
+        <Typography variant="h6" component="p" sx={{ color: 'text.medium', maxWidth: 800 }}>
           Discover products that match your search query.
         </Typography>
       </Box>
@@ -64,7 +64,7 @@ const SearchPage = () => {
               <Pagination count={countProducts} page={page} limit={limit} />
             </>
           ) : (
-            <Typography variant="h6" color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+            <Typography variant="h6" color="text.medium" sx={{ textAlign: 'center', mt: 4 }}>
               No products found. Try a different search term.
             </Typography>
           )}
