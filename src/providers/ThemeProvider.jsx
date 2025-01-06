@@ -1,7 +1,8 @@
-import { useState, createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import '@fontsource/inter';
+import { useAuth } from './AuthProvider';
+import '@fontsource-variable/inter';
 import '@fontsource/quantico';
 
 const ThemeContext = createContext();
@@ -9,8 +10,9 @@ const ThemeContext = createContext();
 export const useTheme = () => useContext(ThemeContext);
 
 export default ({ children }) => {
-  const [themeMode, setThemeMode] = useState('light'); // 'light' or 'dark'
-
+  const { settings, setSettings } = useAuth();
+  const themeMode = settings.theme?.mode || 'light';
+  const setThemeMode = (mode) => setSettings({ ...settings, theme: { ...settings.theme, mode } });
   const toggleThemeMode = () => setThemeMode(themeMode === 'light' ? 'dark' : 'light');
 
   const theme = createTheme({
@@ -19,9 +21,11 @@ export default ({ children }) => {
       primary: { main: '#c30082', light: '#ffe7f7', contrastText: '#fff' },
       tertiary: { main: '#8200c3', light: '#f7e7ff', contrastText: '#fff' },
       secondary: { main: '#0042c3', light: '#e7efff', contrastText: '#fff' },
+      link: { main: themeMode === 'light' ? '#00000000' : '#ffffffff' },
       text: themeMode === 'light' ? {
         veryDark: '#000',
         dark: '#080b11',
+        header: '#080b11',
         primary: '#21242a',
         subtitle: '#222',
         medium: '#6f7780',
@@ -30,6 +34,7 @@ export default ({ children }) => {
       } : {
         veryDark: '#000',
         dark: '#080b11',
+        header: '#fafcfe',
         primary: '#f3f5f7',
         subtitle: '#222',
         medium: '#6f7780',
@@ -37,8 +42,9 @@ export default ({ children }) => {
         hoverFaded: '#939aa3'
       },
       background: {
-        default: themeMode === 'light' ? '#fff' : '#121212',
-        paper: themeMode === 'light' ? '#f3f5f7' : '#1e1e1e',
+        default: themeMode === 'light' ? '#fff' : '#000',
+        paper: themeMode === 'light' ? '#f3f5f7' : '#06080a',
+        contrast: themeMode === 'light' ? '#080b11' : '#fafcfe',
         lightCard: '#f3f5f7',
         cardBorder: '#e2e6ed',
         linkHover: '#f0f2f5'

@@ -3,15 +3,35 @@ import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-do
 import { Fade, AppBar, Toolbar, Typography, IconButton, Badge, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useAuth } from '../../providers/AuthProvider';
 import { useCart } from '../../providers/CartProvider';
+import { useTheme } from '../../providers/ThemeProvider';
 import LinkButton from '../buttons/LinkButton';
 import LogoText from './LogoText';
 import Cart from '../cart/Cart';
 import SearchForm from '../shop/SearchForm';
 import UserMenu from './UserMenu';
 import BackdropMenu from './BackdropMenu';
+
+const NavLink = ({ to, small = 'small', children }) => {
+  return (
+    <LinkButton
+      to={to}
+      size={small}
+      sx={{
+        px: 1,
+        borderRadius: 2,
+        textTransform: 'none',
+        color: 'currentcolor'
+      }}
+      color="link"
+    >
+      {children}
+    </LinkButton>
+  );
+};
 
 const Header = () => {
   const [isSearching, setIsSearching] = useState(false);
@@ -22,6 +42,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { user, isLoading } = useAuth();
   const { cart, showCart, closeCart, toggleCart } = useCart();
+  const { themeMode, toggleThemeMode } = useTheme();
   const headerRef = useRef(null);
   const cartButtonRef = useRef(null);
 
@@ -50,27 +71,47 @@ const Header = () => {
       <AppBar
         ref={headerRef}
         position="fixed"
-        sx={{
+        elevation={0}
+        sx={({ palette }) => ({
           height,
           boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px',
           backgroundColor: 'background.default',
-          color: 'text.dark'
-        }}
+          color: 'text.header',
+          borderBottom: palette.mode === 'dark' ? '1px solid' : '',
+          borderColor: 'text.medium'
+        })}
       >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <Link to="/" style={{ textDecoration: 'none', color: 'currentcolor' }}>
               <LogoText />
             </Link>
-            <Link to="/shop" style={{ textDecoration: 'none', color: 'currentcolor' }}>
-              <Typography variant="body1">Shop</Typography>
-            </Link>
-            <Box sx={{ flexGrow: 1 }} />
+            <Box component="nav" sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <NavLink to="/">
+                <Typography variant="body1" fontWeight={500}>Home</Typography>
+              </NavLink>
+              <NavLink to="/shop">
+                <Typography variant="body1" fontWeight={500}>Shop</Typography>
+              </NavLink>
+              <NavLink to="/about">
+                <Typography variant="body1" fontWeight={500}>About</Typography>
+              </NavLink>
+              <NavLink to="/contact">
+                <Typography variant="body1" fontWeight={500}>Contact</Typography>
+              </NavLink>
+              {user?.role === 'admin' && (
+                <NavLink to="/admin">
+                  <Typography variant="body1" fontWeight={500}>Admin</Typography>
+                </NavLink>
+              )}
+            </Box>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton color="inherit" onClick={() => setIsSearching(!isSearching)}>
               <SearchIcon />
             </IconButton>
-            <IconButton color="inherit">
-              <DarkModeIcon />
+            <IconButton color="inherit" onClick={toggleThemeMode}>
+              {themeMode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
             </IconButton>
             <IconButton ref={cartButtonRef} color="inherit" onClick={toggleCart} aria-label="Toggle Cart">
               <Badge badgeContent={cart?.products.length || 0} color="primary">
@@ -84,20 +125,29 @@ const Header = () => {
                 <UserMenu />
               ) : (
                 <>
-                  <LinkButton to="/login" variant="outlined" sx={{
-                    borderRadius: 2,
-                    borderColor: 'background.cardBorder',
-                    backgroundColor: 'background.default',
-                    color: 'text.dark'
-                  }}>
+                  <LinkButton
+                    to="/login"
+                    variant="outlined"
+                    sx={{
+                      borderRadius: 2,
+                      borderColor: 'background.cardBorder',
+                      color: 'currentcolor'
+                    }}
+                    color="link"
+                  >
                     Log In
                   </LinkButton>
-                  <LinkButton to="/register" variant="contained" disableElevation sx={{
-                    borderRadius: 2,
-                    borderColor: 'black',
-                    backgroundColor: 'text.dark',
-                    color: 'background.default'
-                  }}>
+                  <LinkButton
+                    to="/register"
+                    variant="contained"
+                    disableElevation
+                    sx={{
+                      borderRadius: 2,
+                      backgroundColor: 'background.contrast',
+                      color: 'background.default'
+                    }}
+                    color="link"
+                  >
                     Sign Up
                   </LinkButton>
                 </>
