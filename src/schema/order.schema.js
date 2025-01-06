@@ -2,7 +2,7 @@ import useSchemaForm from '../hooks/useSchemaForm';
 import { deflateObject } from '../utils/object.utils';
 import Schema from './Schema';
 import { addressFields } from './address.schema';
-import { contactFields } from './contact.schema';
+import { clientFields } from './client.schema';
 
 export const orderFields = {
   items: {
@@ -15,7 +15,8 @@ export const orderFields = {
       amount: { type: 'number', required: true, min: 1 }
     }
   },
-  ...deflateObject({ contact: contactFields, address: addressFields }, 1)
+  status: { type: 'enum', options: ['pending', 'processed', 'shipped', 'delivered', 'cancelled'] },
+  ...deflateObject({ client: clientFields, address: addressFields }, 1)
 };
 
 const orderSchema = new Schema(orderFields);

@@ -19,7 +19,7 @@ const ShipmentPage = () => {
     return {
       ...shipmentSchema.empty(),
       ...pick(deflateObject({
-        contact: {
+        client: {
           'name.first': first,
           'name.last': last.pop() || '',
           ...user
@@ -65,16 +65,16 @@ const ShipmentPage = () => {
         }}>
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6 }}>
-              {inputs['contact.name.first']}
+              {inputs['client.name.first']}
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              {inputs['contact.name.last']}
+              {inputs['client.name.last']}
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              {inputs['contact.email']}
+              {inputs['client.email']}
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              {inputs['contact.phone']}
+              {inputs['client.phone']}
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               {inputs['address.country']}

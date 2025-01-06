@@ -1,10 +1,10 @@
 import Schema from './Schema';
 import { addressFields } from './address.schema';
-import { contactFields } from './contact.schema';
+import { clientFields } from './client.schema';
 import useSchemaForm from '../hooks/useSchemaForm';
 import { deflateObject } from '../utils/object.utils';
 
-export const shipmentFields = deflateObject({ contact: contactFields, address: addressFields }, 1);
+export const shipmentFields = deflateObject({ client: clientFields, address: addressFields }, 1);
 
 const shipmentSchema = new Schema(shipmentFields);
 

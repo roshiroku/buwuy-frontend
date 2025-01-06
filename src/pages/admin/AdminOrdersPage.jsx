@@ -27,15 +27,15 @@ const AdminOrdersPage = () => {
   const columns = useMemo(() => [
     {
       name: 'name',
-      label: 'Customer',
+      label: 'Name',
       sortable: true,
-      parse: ({ contact }) => `${contact.name.first} ${contact.name.last}`
+      parse: ({ client }) => `${client.name.first} ${client.name.last}`
     },
     {
       name: 'email',
       label: 'Email',
       sortable: true,
-      parse: ({ contact }) => contact.email
+      parse: ({ client }) => client.email
     },
     {
       name: 'subtotal',

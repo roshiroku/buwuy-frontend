@@ -56,7 +56,18 @@ const OrderPage = () => {
                 Items
               </Typography>
               {items?.map((item, index) => (
-                <Box key={index} sx={{ display: 'flex', p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2, alignItems: 'center', gap: 2 }}>
+                <Box
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    p: 2,
+                    border: '1px solid',
+                    borderColor: 'background.cardBorder',
+                    borderRadius: 2,
+                    alignItems: 'center',
+                    gap: 2
+                  }}
+                >
                   {item.image && (
                     <Avatar variant="square" src={item.image} alt={item.name} sx={{ width: 64, height: 64 }} />
                   )}
@@ -67,15 +78,15 @@ const OrderPage = () => {
                 </Box>
               ))}
             </Box>
-            {order.contact && (
+            {order.client && (
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  Contact Information
+                  Client Information
                 </Typography>
                 <Typography variant="body1">
-                  {order.contact.name.first} {order.contact.name.last}<br />
-                  {order.contact.email}<br />
-                  {order.contact.phone}
+                  {order.client.name.first} {order.client.name.last}<br />
+                  {order.client.email}<br />
+                  {order.client.phone}
                 </Typography>
               </Box>
             )}

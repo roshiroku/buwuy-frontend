@@ -86,7 +86,7 @@ const AdminOrderPage = () => {
   const defaultValue = useMemo(() => (order && {
     ...order,
     ...deflateObject({
-      contact: order.contact,
+      client: order.client,
       address: order.address
     }, 2)
   }), [order]);
@@ -139,16 +139,16 @@ const AdminOrderPage = () => {
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>
-                {inputs['contact.name.first']}
+                {inputs['client.name.first']}
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
-                {inputs['contact.name.last']}
+                {inputs['client.name.last']}
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
-                {inputs['contact.email']}
+                {inputs['client.email']}
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
-                {inputs['contact.phone']}
+                {inputs['client.phone']}
               </Grid>
             </Grid>
 
