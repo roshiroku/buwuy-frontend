@@ -14,7 +14,7 @@ const ProfilePage = () => {
 
   const handleSubmit = async (values) => {
     await updateProfile(inflateObject(values));
-    navigate('/profile');
+    navigate('/');
   };
 
   const userSchema = useMemo(() => {
