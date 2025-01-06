@@ -67,7 +67,13 @@ const Input = ({ type, value = '', ...props }) => {
 
   const commonProps = {
     value,
-    onChange: (e) => props.onChange && props.onChange(e.target.value),
+    onChange: (e) => {
+      if (props.onChange) {
+        const temp = e.target.value;
+        const value = type === 'number' && !Number.isNaN(Number(temp)) ? Number(temp) : temp;
+        props.onChange(value);
+      }
+    },
     onFocus: props.onFocus,
     onBlur: props.onBlur,
     focused: props.focused,
