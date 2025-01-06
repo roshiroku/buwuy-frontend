@@ -1,4 +1,4 @@
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import ThemeProvider from './providers/ThemeProvider';
 import CategoryProvider from './providers/CategoryProvider';
 import TagProvider from './providers/TagProvider';
@@ -38,6 +38,7 @@ import AdminProductPage from './pages/admin/AdminProductPage';
 import AdminTagsPage from './pages/admin/AdminTagsPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import AdminUserPage from './pages/admin/AdminUserPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 export default () => {
   return (
@@ -81,6 +82,7 @@ export default () => {
               <Route path="orders" element={<OrdersPage />} />
             </Route>
             <Route path="orders/:id" element={<OrderPage />} />
+            <Route path="404" element={<NotFoundPage />} />
           </Route>
         </Route>
         <Route path="admin" element={<AdminLayout><Outlet /></AdminLayout>}>
@@ -108,6 +110,7 @@ export default () => {
             </GuestOnly>
           )} />
         </Route>
+        <Route path="*" element={<Navigate to="/404" replace />} />
       </Route>
     </Routes >
   );
