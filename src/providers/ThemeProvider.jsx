@@ -53,6 +53,17 @@ export default ({ children }) => {
     typography: {
       fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
       logoFont: '"Quantico", sans-serif'
+    },
+    components: {
+      MuiCard: {
+        elevation: 0,
+        sx: {
+          borderRadius: 3,
+          borderWidth: 1,
+          borderColor: 'background.cardBorder',
+          borderStyle: 'solid'
+        }
+      }
     }
   });
 

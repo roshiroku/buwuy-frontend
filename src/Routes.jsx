@@ -7,6 +7,7 @@ import Authenticate from './components/auth/Authenticate';
 import Authorize from './components/auth/Authorize';
 import GuestOnly from './components/auth/GuestOnly';
 import Layout from './components/layout/Layout';
+import Container from './components/layout/Container';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -27,7 +28,7 @@ import OrdersPage from './pages/OrdersPage';
 import OrderPage from './pages/OrderPage';
 import AdminLayout from './components/admin/layout/AdminLayout';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
-import AdminPage from './pages/admin/AdminPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminCategoryPage from './pages/admin/AdminCategoryPage';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
@@ -58,31 +59,33 @@ export default () => {
           </CartProvider>
         )}>
           <Route index element={<HomePage />} />
-          <Route path="about" element={<AboutPage />} />
-          <Route path="contact" element={<ContactPage />} />
-          <Route path="contact/success" element={<ContactSuccessPage />} />
-          <Route element={<GuestOnly><Outlet /></GuestOnly>}>
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
+          <Route element={<Container><Outlet /></Container>}>
+            <Route path="about" element={<AboutPage />} />
+            <Route path="contact" element={<ContactPage />} />
+            <Route path="contact/success" element={<ContactSuccessPage />} />
+            <Route element={<GuestOnly><Outlet /></GuestOnly>}>
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+            </Route>
+            <Route path="shop" element={<ShopPage />} />
+            <Route path="shop/search" element={<SearchPage />} />
+            <Route path="shop/best-sellers" element={<BestSellersPage />} />
+            <Route path="shop/:categorySlug" element={<CategoryPage />} />
+            <Route path="shop/:categorySlug/:productSlug" element={<ProductPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="checkout/shipment" element={<ShipmentPage />} />
+            <Route path="checkout/payment/:id" element={<PaymentPage />} />
+            <Route path="checkout/success/:id" element={<CheckoutSuccessPage />} />
+            <Route element={<Authenticate><Outlet /></Authenticate>}>
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="orders" element={<OrdersPage />} />
+            </Route>
+            <Route path="orders/:id" element={<OrderPage />} />
           </Route>
-          <Route path="shop" element={<ShopPage />} />
-          <Route path="shop/search" element={<SearchPage />} />
-          <Route path="shop/best-sellers" element={<BestSellersPage />} />
-          <Route path="shop/:categorySlug" element={<CategoryPage />} />
-          <Route path="shop/:categorySlug/:productSlug" element={<ProductPage />} />
-          <Route path="checkout" element={<CheckoutPage />} />
-          <Route path="checkout/shipment" element={<ShipmentPage />} />
-          <Route path="checkout/payment/:id" element={<PaymentPage />} />
-          <Route path="checkout/success/:id" element={<CheckoutSuccessPage />} />
-          <Route element={<Authenticate><Outlet /></Authenticate>}>
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="orders" element={<OrdersPage />} />
-          </Route>
-          <Route path="orders/:id" element={<OrderPage />} />
         </Route>
         <Route path="admin" element={<AdminLayout><Outlet /></AdminLayout>}>
           <Route element={<Authorize redirect="/admin/login"><Outlet /></Authorize>}>
-            <Route index element={<AdminPage />} />
+            <Route index element={<AdminDashboard />} />
             <Route path="category" element={<AdminCategoryPage />} />
             <Route path="categories" element={<AdminCategoriesPage />} />
             <Route path="categories/:id" element={<AdminCategoryPage />} />
