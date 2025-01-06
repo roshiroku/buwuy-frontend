@@ -84,7 +84,7 @@ export default () => {
           </Route>
         </Route>
         <Route path="admin" element={<AdminLayout><Outlet /></AdminLayout>}>
-          <Route element={<Authorize redirect="/admin/login"><Outlet /></Authorize>}>
+          <Route element={<Authorize roles={['admin', 'moderator']} redirect="/admin/login"><Outlet /></Authorize>}>
             <Route index element={<AdminDashboard />} />
             <Route path="category" element={<AdminCategoryPage />} />
             <Route path="categories" element={<AdminCategoriesPage />} />
@@ -96,9 +96,11 @@ export default () => {
             <Route path="products" element={<AdminProductsPage />} />
             <Route path="products/:id" element={<AdminProductPage />} />
             <Route path="tags" element={<AdminTagsPage />} />
-            <Route path="user" element={<AdminUserPage />} />
-            <Route path="users" element={<AdminUsersPage />} />
-            <Route path="users/:id" element={<AdminUserPage />} />
+            <Route element={<Authorize redirect="/admin/login"><Outlet /></Authorize>}>
+              <Route path="user" element={<AdminUserPage />} />
+              <Route path="users" element={<AdminUsersPage />} />
+              <Route path="users/:id" element={<AdminUserPage />} />
+            </Route>
           </Route>
           <Route path="login" element={(
             <GuestOnly redirect={({ role }) => role === 'admin' ? '/admin' : '/'}>

@@ -80,7 +80,7 @@ const Header = () => {
               <NavLink to="/contact">
                 <Typography variant="body1" fontWeight={500}>Contact</Typography>
               </NavLink>
-              {user?.role === 'admin' && (
+              {['admin', 'moderator'].includes(user?.role) && (
                 <NavLink to="/admin">
                   <Typography variant="body1" fontWeight={500}>Admin</Typography>
                 </NavLink>
