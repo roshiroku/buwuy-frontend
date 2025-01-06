@@ -62,12 +62,13 @@ const ProductCard = ({ to, product }) => {
           color="primary"
           sx={{ borderRadius: 2 }}
           fullWidth
+          disabled={!product.stock}
           onClick={() => {
             updateCart(product, 1);
             openCart();
           }}
         >
-          Add to Cart
+          {product.stock ? 'Add To Cart' : 'Out Of Stock'}
         </Button>
       </Box>
     </Card>
