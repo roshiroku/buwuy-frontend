@@ -1,18 +1,14 @@
-import { useState } from 'react';
-import { Box, Typography, CircularProgress, Grid2 as Grid, InputAdornment, Button, Divider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Typography, CircularProgress, Grid2 as Grid } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '../../services/product.service';
-import { useTags } from '../../providers/TagProvider';
-import Input from '../../components/forms/Input';
-import Autocomplete from '../../components/forms/Autocomplete';
 import ProductCard from '../../components/shop/ProductCard';
 import Pagination from '../../components/layout/Pagination';
-import SearchIcon from '@mui/icons-material/Search';
+import SearchForm from '../../components/shop/SearchForm';
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState(searchParams.get('q') || '');
-  const { tags } = useTags();
 
   const sort = searchParams.get('sort') || 'name';
   const page = Number(searchParams.get('page')) || 1;
@@ -28,12 +24,9 @@ const SearchPage = () => {
     sort
   });
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const params = { q: searchInput, page: 1, sort };
-    if (tagSlugs.length) params.tags = tagSlugs;
-    setSearchParams(params);
-  };
+  useEffect(() => {
+    setSearchInput(search);
+  }, [search]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, py: 4 }}>
@@ -46,65 +39,12 @@ const SearchPage = () => {
         </Typography>
       </Box>
 
-      <Box
-        component="form"
-        onSubmit={handleSearch}
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: { md: 'center' },
-          gap: 2
-        }}
-      >
-        <Autocomplete
-          options={tags.map((tag) => ({ value: tag.slug, label: tag.name }))}
-          value={tagSlugs}
-          onChange={(value) => setSearchParams({ q: searchInput, tags: value, page: 1, sort })}
-          placeholder="Filter by Tags"
-          multiple
-          sx={{ flex: 1 }}
-        />
-        <Typography variant="body1" sx={{ display: { xs: 'none', md: 'block' } }}>
-          Or
-        </Typography>
-        <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 2, alignItems: 'center' }}>
-          <Divider sx={{ flexGrow: 1, borderColor: 'background.cardBorder' }} />
-          <Typography
-            variant="body2"
-            sx={{
-              color: 'text.faded',
-              textTransform: 'uppercase',
-              lineHeight: 1
-            }}
-          >
-            Or
-          </Typography>
-          <Divider sx={{ flexGrow: 1, borderColor: 'background.cardBorder' }} />
-        </Box>
-        <Input
-          value={searchInput}
-          onChange={(value) => setSearchInput(value)}
-          placeholder="Search products..."
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              )
-            }
-          }}
-          sx={{ flex: 1 }}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ borderRadius: 2 }}
-        >
-          Search
-        </Button>
-      </Box>
+      <SearchForm
+        value={searchInput}
+        onInput={setSearchInput}
+        onChange={(params) => setSearchParams({ ...Object.fromEntries(searchParams.entries()), ...params })}
+        tags={tagSlugs?.filter(Boolean)}
+      />
 
       {isLoadingProducts ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
