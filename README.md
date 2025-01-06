@@ -182,16 +182,4 @@ If you encounter issues or wish to reset your session, **clearing localStorage a
 
 ---
 
-## Contributing
-
-Contributions, bug reports, and feature requests are welcome. Please open an issue or submit a pull request with any improvements or fixes you make. When contributing, please follow best practices for React and ensure consistent code style with ESLint.
-
----
-
-## License
-
-This project is licensed under the [ISC License](LICENSE). You are free to modify, distribute, or use this project under the terms of the license.
-
----
-
 **Happy coding and enjoy using the Buwuy Origami Shop frontend!** If you have any questions or suggestions, feel free to reach out.
