@@ -8,8 +8,8 @@ import BrushIcon from '@mui/icons-material/Brush';
 
 const containerStyle = ({ palette }) => ({
   textAlign: 'center',
-  color: palette.mode === 'dark' ? 'text.medium' : 'secondary.main',
-  backgroundColor: palette.mode === 'dark' ? 'background.paper' : 'secondary.light',
+  color: palette.mode === 'dark' ? 'text.medium' : 'primary.main',
+  backgroundColor: palette.mode === 'dark' ? 'background.paper' : 'primary.light',
   border: '1px solid',
   borderColor: 'divider',
   p: 2,

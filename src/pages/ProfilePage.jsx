@@ -9,7 +9,7 @@ import { deflateObject, inflateObject } from '../utils/object.utils';
 import { useAuth } from '../providers/AuthProvider';
 
 const ProfilePage = () => {
-  const { user: currentUser, isLoading, updateProfile } = useAuth();
+  const { user, isLoading, updateProfile } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
@@ -25,7 +25,7 @@ const ProfilePage = () => {
     return new Schema(fields);
   }, []);
 
-  const defaultValue = useMemo(() => deflateObject(currentUser, 1), [currentUser]);
+  const defaultValue = useMemo(() => deflateObject(user, 1), [user]);
 
   const {
     values,

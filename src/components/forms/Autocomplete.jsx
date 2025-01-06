@@ -26,7 +26,7 @@ const Autocomplete = ({
         _value.map((value) => options.find((opt) => opt.value === value))
       ) : [];
     } else {
-      return options.find(({ value }) => value === _value);
+      return options.find(({ value }) => value === _value) || '';
     }
   }, [_value, options, multiple]);
 

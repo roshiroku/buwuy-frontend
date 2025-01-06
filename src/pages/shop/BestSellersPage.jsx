@@ -25,40 +25,38 @@ const BestSellersPage = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <>
-          {products.length > 0 ? (
-            <Grid container spacing={4}>
-              {products.map((product, index) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={product._id}>
-                  <Box sx={{ position: 'relative' }}>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        position: 'absolute',
-                        top: 8,
-                        left: 8,
-                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                        color: 'white',
-                        p: '4px 8px',
-                        borderRadius: 4,
-                        fontWeight: 600,
-                        zIndex: 1,
-                        pointerEvents: 'none'
-                      }}
-                    >
-                      #{index + 1}
-                    </Typography>
-                    <ProductCard to={`/shop/${product.category?.slug}/${product.slug}`} product={product} />
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <Typography variant="h6" color="text.medium" sx={{ textAlign: 'center', mt: 4 }}>
-              No products found.
-            </Typography>
-          )}
-        </>
+        products.length > 0 ? (
+          <Grid container spacing={4}>
+            {products.map((product, index) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={product._id}>
+                <Box sx={{ position: 'relative', height: '100%' }}>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      position: 'absolute',
+                      top: 8,
+                      left: 8,
+                      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                      color: 'white',
+                      p: '4px 8px',
+                      borderRadius: 4,
+                      fontWeight: 600,
+                      zIndex: 1,
+                      pointerEvents: 'none'
+                    }}
+                  >
+                    #{index + 1}
+                  </Typography>
+                  <ProductCard to={`/shop/${product.category?.slug}/${product.slug}`} product={product} />
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Typography variant="h6" color="text.medium" sx={{ textAlign: 'center', mt: 4 }}>
+            No products found.
+          </Typography>
+        )
       )}
     </Box>
   );

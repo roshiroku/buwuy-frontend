@@ -30,7 +30,6 @@ export default function useSchemaForm(schema, { default: _default, handleChange,
         <Input
           key={name}
           value={values[name]}
-          placeholder={field.label}
           onChange={onChange(name)}
           error={errors[name]}
           fullWidth

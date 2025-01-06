@@ -58,7 +58,8 @@ const ImageInput = ({ value, onChange, label, error }) => {
         sx={{
           position: 'absolute',
           inset: 0,
-          '& .MuiInputBase-root': { height: '100%', cursor: 'unset' }
+          '& .MuiInputBase-root': { height: '100%', cursor: 'unset' },
+          input: { pointerEvents: 'none', userSelect: 'none', opacity: 0 }
         }}
         slotProps={{ input: { readOnly: true } }}
       />

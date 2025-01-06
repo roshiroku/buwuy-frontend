@@ -6,6 +6,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
+import { remoteAsset } from '../../utils/url.utils';
 
 const UserMenu = () => {
   const userButtonRef = useRef(null);
@@ -19,7 +20,7 @@ const UserMenu = () => {
   return (
     <>
       <IconButton ref={userButtonRef} onClick={() => setIsOpen(!isOpen)} color="inherit">
-        <Avatar src={user.avatar} alt={user.name} />
+        <Avatar src={remoteAsset(user.avatar)} alt={user.name} />
       </IconButton>
       <Menu
         anchorEl={userButtonRef.current}

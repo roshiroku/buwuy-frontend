@@ -14,7 +14,7 @@ const CategoryPage = () => {
   const sort = searchParams.get('sort') || 'name';
   const { categories, isLoadingCategories } = useCategories();
   const { products, countProducts, isLoadingProducts } = useProducts({
-    categorySlug,
+    category: categorySlug,
     skip: (page - 1) * limit,
     limit,
     sort

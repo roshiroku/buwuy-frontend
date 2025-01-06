@@ -59,7 +59,7 @@ const Input = ({ type, value = '', ...props }) => {
   const characterCountHelperText = props.max && ['text', 'string'].includes(type) ? (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <Typography variant="small" color="error.main" sx={{ flexGrow: 1 }}>{props.error}</Typography>
-      <Typography variant="small" color="text.medium" sx={{ flexShrink: 0 }}>{`${value.length} / ${props.max}`}</Typography>
+      <Typography variant="small" color={props.error ? 'error.main' : 'text.medium'} sx={{ flexShrink: 0 }}>{`${value.length} / ${props.max}`}</Typography>
     </Box>
   ) : (
     props.error

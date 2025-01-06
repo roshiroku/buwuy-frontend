@@ -39,7 +39,9 @@ export function fieldValidator(name, { type = 'object', ...field }) {
   }
 
   if (field.options) {
-    const options = typeof field.options === 'object' ? Object.keys(field.options) : field.options;
+    const options = Array.isArray(field.options) ? field.options.map((opt) => (
+      Array.isArray(opt) ? opt[0] : opt
+    )) : Object.keys(field.options);
     validator = validator.valid(...options);
   }
 
